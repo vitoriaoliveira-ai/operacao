@@ -1170,4 +1170,11 @@ async function tryRealtimeRefresh() {
       el.classList.add('live');
       el.textContent = 'Dados atualizados em tempo real · ' + new Date().toLocaleString('pt-BR');
     }
- 
+  } catch(e) {
+    console.log('Não foi possível atualizar em tempo real:', e);
+  }
+}
+setTimeout(tryRealtimeRefresh, 500);
+</script>
+</body>
+</html>
