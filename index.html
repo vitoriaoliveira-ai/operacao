@@ -284,7 +284,7 @@ footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border
   <div class="kpi-grid">
     <div class="kpi"><div class="label">Vagas Trabalhadas</div><div class="value">138</div><div class="sub">28 fechadas · 17 canceladas · 100 ativas</div></div>
     <div class="kpi danger"><div class="label">Vagas "Enviar Novos"</div><div class="value">65</div><div class="sub">47% das ativas paradas</div></div>
-    <div class="kpi"><div class="label">SIMs Realizados</div><div class="value">28 / 43</div><div class="sub">65% da meta</div></div>
+    <div class="kpi"><div class="label">SIMs Realizados</div><div class="value">35 / 66</div><div class="sub">53% da meta · faltam 31</div></div>
     <div class="kpi"><div class="label">% Aproveitamento</div><div class="value">61%</div><div class="sub">Histórico 12m: 53%</div></div>
   </div>
 </section>
@@ -403,7 +403,7 @@ footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border
   <h2 class="projetos">Projetos — Operação de Vagas</h2>
   <div class="kpi-grid">
     <div class="kpi"><div class="label">Vagas Trabalhadas</div><div class="value">138</div><div class="sub">+28% vs abr (108)</div></div>
-    <div class="kpi success"><div class="label">Fechadas (SIMs)</div><div class="value">28</div><div class="sub">Meta 43 · 65%</div></div>
+    <div class="kpi success"><div class="label">Fechadas (SIMs)</div><div class="value">35</div><div class="sub">Meta mês 66 · 53%</div></div>
     <div class="kpi danger"><div class="label">Canceladas</div><div class="value">17</div><div class="sub">12% do volume</div></div>
     <div class="kpi info"><div class="label">Ativas (em andamento)</div><div class="value">100</div><div class="sub">65 paradas em "Enviar Novos"</div></div>
   </div>
@@ -429,12 +429,13 @@ footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border
   <h2 class="projetos">Performance Individual · Especialistas</h2>
   <div class="card">
     <table>
-      <thead><tr><th>Especialista</th><th>Squad</th><th>Trabalhadas</th><th>Fechadas</th><th>Atingimento</th><th>Faturamento Mensal</th><th>Status</th></tr></thead>
+      <thead><tr><th>Especialista</th><th>Squad</th><th>Trabalhadas</th><th>SIMs (fechadas)</th><th>Meta SIMs</th><th>Atingimento</th><th>Faturamento Mensal</th></tr></thead>
       <tbody>
-        <tr><td><strong>Isabelle</strong></td><td><span class="badge info">Brasil</span></td><td>24</td><td>8</td><td><span class="badge success">120%</span></td><td>R$ 31.937</td><td><span class="badge success">Acima da meta</span></td></tr>
-        <tr><td><strong>Vittória</strong></td><td><span class="badge info">Core</span></td><td>17</td><td>6</td><td><span class="badge warn">85%</span></td><td>R$ 14.265</td><td><span class="badge warn">Atenção</span></td></tr>
-        <tr><td><strong>Carla</strong></td><td><span class="badge info">Expansão</span></td><td>17</td><td>5</td><td><span class="badge warn">85%</span></td><td>R$ 29.169</td><td><span class="badge warn">Atenção</span></td></tr>
-        <tr><td><strong>Thaiz</strong></td><td><span class="badge info">Estratégicos</span></td><td>8</td><td>9</td><td><span class="badge danger">40%</span></td><td>R$ 6.900</td><td><span class="badge danger">Baixa produção</span></td></tr>
+        <tr><td><strong>Thaiz</strong></td><td><span class="badge info">Estratégicos</span></td><td>8</td><td>11</td><td>8</td><td><span class="badge success">137%</span></td><td>R$ 6.900</td></tr>
+        <tr><td><strong>Isabelle</strong></td><td><span class="badge info">Core</span></td><td>24</td><td>11</td><td>24</td><td><span class="badge danger">46%</span></td><td>R$ 31.937</td></tr>
+        <tr><td><strong>Vittória</strong></td><td><span class="badge info">Brasil</span></td><td>17</td><td>7</td><td>17</td><td><span class="badge danger">41%</span></td><td>R$ 14.265</td></tr>
+        <tr><td><strong>Carla</strong></td><td><span class="badge info">Expansão</span></td><td>17</td><td>6</td><td>17</td><td><span class="badge danger">35%</span></td><td>R$ 29.169</td></tr>
+        <tr style="background:#f9fafb"><td colspan="3"><strong>Total time</strong></td><td><strong>35</strong></td><td><strong>66</strong></td><td><strong>53%</strong></td><td><strong>R$ 82.271</strong></td></tr>
       </tbody>
     </table>
   </div>
@@ -783,7 +784,7 @@ const DATA = {
   historico: {
     meses: ['mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25','jan/26','fev/26','mar/26','abr/26','mai/26'],
     projetos: {
-      sims: [80,49,73,56,61,44,43,49,36,39,59,44,28],
+      sims: [80,49,73,56,61,44,43,49,36,39,59,44,35],
       receita: [201199,149407,205719,143152,184941,165053,134550,129907,159999,114591,168136,145320,96635],
       pessoas: [8,8,8,8,6,6,6,6,4,4,4,5,5],
       custo: [39611,39611,39611,39611,28340,28340,28340,28340,28340,19000,19000,19000,19000],
@@ -811,48 +812,48 @@ const DATA = {
   vagas: [
     ['16129','GR ASSESSORIA CONTABIL','Thaiz','Estratégicos','04/12/2025','167','Enviar Novos','R$ 0','Crítica'],
     ['16135','Naves Coelho Contábil','Adriele','Brasil','12/12/2025','159','Enviar Novos','R$ 0','Crítica'],
-    ['16320','RUFINO CONSULTORIA','Vittória','Core','28/01/2026','112','Enviar Novos','R$ 1.085','Crítica'],
-    ['16193','Masterqualy','Vittória','Core','20/01/2026','120','Enviar Novos','R$ 906','Crítica'],
-    ['16308','Bagnato Associados','Vittória','Core','27/01/2026','113','Enviar Novos','R$ 2.121','Crítica'],
-    ['16348','Orgatec','Isabelle','Brasil','04/02/2026','106','Enviar Novos','R$ 4.830','Crítica'],
-    ['16401','UNIDAS DO BRASIL','Isabelle','Brasil','10/02/2026','100','Agendar Entrevista','R$ 1.085','Atenção'],
+    ['16320','RUFINO CONSULTORIA','Vittória','Brasil','28/01/2026','112','Enviar Novos','R$ 1.085','Crítica'],
+    ['16193','Masterqualy','Vittória','Brasil','20/01/2026','120','Enviar Novos','R$ 906','Crítica'],
+    ['16308','Bagnato Associados','Vittória','Brasil','27/01/2026','113','Enviar Novos','R$ 2.121','Crítica'],
+    ['16348','Orgatec','Isabelle','Core','04/02/2026','106','Enviar Novos','R$ 4.830','Crítica'],
+    ['16401','UNIDAS DO BRASIL','Isabelle','Core','10/02/2026','100','Agendar Entrevista','R$ 1.085','Atenção'],
     ['16476','D+ Contabilidade','Carla','Expansão','24/02/2026','86','Enviar Novos','R$ 907','Atenção'],
-    ['16480','Piacente','Isabelle','Brasil','24/02/2026','86','Enviar Novos','R$ 3.387','Atenção'],
-    ['16384','Anima Legalizações','Isabelle','Brasil','11/02/2026','99','Enviar Novos','R$ 447','Atenção'],
-    ['16385','Anima Legalizações','Isabelle','Brasil','18/02/2026','92','Enviar Novos','R$ 735','Atenção'],
-    ['16487','Fiscotec','Isabelle','Brasil','26/02/2026','84','Enviar Novos','R$ 1.682','Atenção'],
+    ['16480','Piacente','Isabelle','Core','24/02/2026','86','Enviar Novos','R$ 3.387','Atenção'],
+    ['16384','Anima Legalizações','Isabelle','Core','11/02/2026','99','Enviar Novos','R$ 447','Atenção'],
+    ['16385','Anima Legalizações','Isabelle','Core','18/02/2026','92','Enviar Novos','R$ 735','Atenção'],
+    ['16487','Fiscotec','Isabelle','Core','26/02/2026','84','Enviar Novos','R$ 1.682','Atenção'],
     ['16328','Miranda e Costa','Thaiz','Estratégicos','04/02/2026','106','Agendar Entrevista','R$ 1.925','Atenção'],
-    ['16333','RR Oliveira (RRO)','Isabelle','Brasil','18/02/2026','92','Enviar Novos','R$ 980','Atenção'],
+    ['16333','RR Oliveira (RRO)','Isabelle','Core','18/02/2026','92','Enviar Novos','R$ 980','Atenção'],
     ['16485','Medeiros Org','Carla','Expansão','26/02/2026','84','Enviar Novos','R$ 2.940','Atenção'],
-    ['16502','Diamante Contabilidade','Isabelle','Brasil','25/02/2026','85','Enviar Novos','R$ 2.100','Atenção'],
-    ['16513','Constanzo Contabilidade','Isabelle','Brasil','27/02/2026','83','Enviar Novos','R$ 875','Atenção'],
-    ['16517','Alliance Contabilidade','Vittória','Core','27/02/2026','83','Enviar Novos','R$ 1.102','Atenção'],
+    ['16502','Diamante Contabilidade','Isabelle','Core','25/02/2026','85','Enviar Novos','R$ 2.100','Atenção'],
+    ['16513','Constanzo Contabilidade','Isabelle','Core','27/02/2026','83','Enviar Novos','R$ 875','Atenção'],
+    ['16517','Alliance Contabilidade','Vittória','Brasil','27/02/2026','83','Enviar Novos','R$ 1.102','Atenção'],
     ['16519','GLM Escritório','Carla','Expansão','27/02/2026','83','Enviar Novos','R$ 2.362','Atenção'],
     ['16542','Contabilidade Lima','Carla','Expansão','04/03/2026','78','Enviar Novos','R$ 1.208','Em andamento'],
-    ['16553','JT Prestação Serv','Isabelle','Brasil','05/03/2026','77','Enviar Novos','R$ 1.487','Em andamento'],
-    ['16557','Wilker Contabilidade','Isabelle','Brasil','06/03/2026','76','Enviar Novos','R$ 735','Em andamento'],
-    ['16560','Kativa Contabilidade','Isabelle','Brasil','06/03/2026','76','Enviar Novos','R$ 955','Em andamento'],
-    ['16562','Kativa Contabilidade','Isabelle','Brasil','06/03/2026','76','Enviar Novos','R$ 928','Em andamento'],
-    ['16563','Kativa Contabilidade','Isabelle','Brasil','06/03/2026','76','Enviar Novos','R$ 2.773','Em andamento'],
-    ['16564','ITATIAIA ATACADISTA','Vittória','Core','09/03/2026','73','Enviar Novos','R$ 1.487','Em andamento'],
-    ['16577','ANKOR','Vittória','Core','10/03/2026','72','Enviar Novos','R$ 1.418','Em andamento'],
-    ['16576','Helmar Contabil','Isabelle','Brasil','10/03/2026','72','Enviar Novos','R$ 875','Em andamento'],
-    ['16575','Helmar Contabil','Isabelle','Brasil','10/03/2026','72','Aguard. Feedback','R$ 875','Próx. fechamento'],
-    ['16580','MISTER CONT','Isabelle','Brasil','10/03/2026','72','Enviar Novos','R$ 1.121','Em andamento'],
-    ['16626','DUOEXO CONTABILIDADE','Vittória','Core','17/03/2026','65','Aguard. Feedback','R$ 5.075','Próx. fechamento'],
-    ['16645','PGS','Isabelle','Brasil','19/03/2026','63','Aguard. Feedback','R$ 6.300','Próx. fechamento'],
+    ['16553','JT Prestação Serv','Isabelle','Core','05/03/2026','77','Enviar Novos','R$ 1.487','Em andamento'],
+    ['16557','Wilker Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 735','Em andamento'],
+    ['16560','Kativa Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 955','Em andamento'],
+    ['16562','Kativa Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 928','Em andamento'],
+    ['16563','Kativa Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 2.773','Em andamento'],
+    ['16564','ITATIAIA ATACADISTA','Vittória','Brasil','09/03/2026','73','Enviar Novos','R$ 1.487','Em andamento'],
+    ['16577','ANKOR','Vittória','Brasil','10/03/2026','72','Enviar Novos','R$ 1.418','Em andamento'],
+    ['16576','Helmar Contabil','Isabelle','Core','10/03/2026','72','Enviar Novos','R$ 875','Em andamento'],
+    ['16575','Helmar Contabil','Isabelle','Core','10/03/2026','72','Aguard. Feedback','R$ 875','Próx. fechamento'],
+    ['16580','MISTER CONT','Isabelle','Core','10/03/2026','72','Enviar Novos','R$ 1.121','Em andamento'],
+    ['16626','DUOEXO CONTABILIDADE','Vittória','Brasil','17/03/2026','65','Aguard. Feedback','R$ 5.075','Próx. fechamento'],
+    ['16645','PGS','Isabelle','Core','19/03/2026','63','Aguard. Feedback','R$ 6.300','Próx. fechamento'],
     ['16680','Arca Accounttech','Thaiz','Estratégicos','27/03/2026','55','Entrev. Agendada','R$ 4.200','Próx. fechamento'],
-    ['16689','Pedra Branca Contabilidade','Vittória','Core','31/03/2026','51','Entrev. Agendada','R$ 5.250','Próx. fechamento'],
-    ['16704','Nutriport Comercial','Isabelle','Brasil','07/04/2026','44','Enviar Novos','R$ 5.460','Em andamento'],
-    ['16714','TAG / INFINITI','Isabelle','Brasil','08/04/2026','43','Enviar Novos','R$ 4.725','Em andamento'],
-    ['16715','TAG / INFINITI','Isabelle','Brasil','08/04/2026','43','Enviar Novos','R$ 3.203','Em andamento'],
-    ['16717','FOCVS INTELIGENCIA','Vittória','Core','09/04/2026','42','Enviar Novos','R$ 2.452','Em andamento'],
-    ['16718','CODEP ASSESSORIA','Isabelle','Brasil','09/04/2026','42','Aguard. Feedback','R$ 4.655','Próx. fechamento'],
-    ['16760','ESCRITORIO CONCEITO','Isabelle','Brasil','17/04/2026','34','Enviar Novos','R$ 3.850','Em andamento'],
+    ['16689','Pedra Branca Contabilidade','Vittória','Brasil','31/03/2026','51','Entrev. Agendada','R$ 5.250','Próx. fechamento'],
+    ['16704','Nutriport Comercial','Isabelle','Core','07/04/2026','44','Enviar Novos','R$ 5.460','Em andamento'],
+    ['16714','TAG / INFINITI','Isabelle','Core','08/04/2026','43','Enviar Novos','R$ 4.725','Em andamento'],
+    ['16715','TAG / INFINITI','Isabelle','Core','08/04/2026','43','Enviar Novos','R$ 3.203','Em andamento'],
+    ['16717','FOCVS INTELIGENCIA','Vittória','Brasil','09/04/2026','42','Enviar Novos','R$ 2.452','Em andamento'],
+    ['16718','CODEP ASSESSORIA','Isabelle','Core','09/04/2026','42','Aguard. Feedback','R$ 4.655','Próx. fechamento'],
+    ['16760','ESCRITORIO CONCEITO','Isabelle','Core','17/04/2026','34','Enviar Novos','R$ 3.850','Em andamento'],
     ['16768','GR DIGITAL','Carla','Expansão','17/04/2026','34','Enviar Novos','R$ 3.238','Em andamento'],
-    ['16776','TAXS CONTABILIDADE','Vittória','Core','20/04/2026','31','Aguard. Feedback','R$ 2.800','Próx. fechamento'],
-    ['16777','TAXS CONTABILIDADE','Vittória','Core','20/04/2026','31','Enviar Novos','R$ 2.800','Em andamento'],
-    ['16794','Neo Contabilidade','Isabelle','Brasil','23/04/2026','28','Enviar Novos','R$ 3.150','Em andamento'],
+    ['16776','TAXS CONTABILIDADE','Vittória','Brasil','20/04/2026','31','Aguard. Feedback','R$ 2.800','Próx. fechamento'],
+    ['16777','TAXS CONTABILIDADE','Vittória','Brasil','20/04/2026','31','Enviar Novos','R$ 2.800','Em andamento'],
+    ['16794','Neo Contabilidade','Isabelle','Core','23/04/2026','28','Enviar Novos','R$ 3.150','Em andamento'],
     ['16832','Lumi Contabilidade','Carla','Expansão','04/05/2026','17','Enviar Novos','R$ 3.010','Em andamento'],
     ['16837','Sauvet Campinas','Carla','Expansão','05/05/2026','16','Enviar Novos','R$ 3.150','Em andamento'],
     ['16838','Sauvet Campinas','Carla','Expansão','05/05/2026','16','Enviar Novos','R$ 3.850','Em andamento'],
@@ -860,7 +861,7 @@ const DATA = {
     ['16865','STABILIS','Carla','Expansão','12/05/2026','9','Enviar Novos','R$ 3.430','Em andamento'],
     ['16869','MMS CONTABILIDADE','Carla','Expansão','12/05/2026','9','Enviar Novos','R$ 2.030','Em andamento'],
     ['16881','Infiniti Tecnologia','Thaiz','Estratégicos','14/05/2026','7','Enviar Novos','R$ 3.150','Em andamento'],
-    ['16890','Trend Marketing','Vittória','Core','15/05/2026','6','Enviar Novos','R$ 2.240','Em andamento'],
+    ['16890','Trend Marketing','Vittória','Brasil','15/05/2026','6','Enviar Novos','R$ 2.240','Em andamento'],
     ['16895','JJR Contabil','Thaiz','Estratégicos','19/05/2026','2','Enviar Novos','R$ 5.775','Em andamento'],
     ['16897','Attenza','Carla','Expansão','19/05/2026','2','Enviar Novos','R$ 3.325','Em andamento'],
   ]
@@ -977,10 +978,11 @@ new Chart(document.getElementById('chartComposicao'), {
 new Chart(document.getElementById('chartSquads'), {
   type: 'bar',
   data: {
-    labels: ['Brasil (Isabelle)','Core (Vittória)','Expansão (Carla)','Estratégicos (Thaiz)'],
+    labels: ['Core (Isabelle)','Brasil (Vittória)','Expansão (Carla)','Estratégicos (Thaiz)'],
     datasets: [
       { label:'Trabalhadas', data:[24,17,17,8], backgroundColor:'#6366f1', borderRadius:4 },
-      { label:'Fechadas', data:[8,6,5,9], backgroundColor:'#10b981', borderRadius:4 },
+      { label:'Fechadas (SIMs)', data:[11,7,6,11], backgroundColor:'#10b981', borderRadius:4 },
+      { label:'Meta SIMs', data:[24,17,17,8], backgroundColor:'#f59e0b', borderRadius:4 },
       { label:'Enviar Novos', data:[21,18,18,8], backgroundColor:'#ef4444', borderRadius:4 }
     ]
   },
@@ -1168,11 +1170,4 @@ async function tryRealtimeRefresh() {
       el.classList.add('live');
       el.textContent = 'Dados atualizados em tempo real · ' + new Date().toLocaleString('pt-BR');
     }
-  } catch(e) {
-    console.log('Não foi possível atualizar em tempo real:', e);
-  }
-}
-setTimeout(tryRealtimeRefresh, 500);
-</script>
-</body>
-</html>
+ 
