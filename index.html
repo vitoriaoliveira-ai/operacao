@@ -1,1680 +1,1171 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Connectabil — Comercial & Projetos</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
-<style>
-:root {
-  color-scheme: light;
-  --bg: #f7f8fb;
-  --card: #ffffff;
-  --border: #e5e7ee;
-  --text: #1a1f36;
-  --muted: #6b7280;
-  --primary: #2563eb;
-  --primary-bg: #eff6ff;
-  --success: #10b981;
-  --warn: #f59e0b;
-  --danger: #ef4444;
-  --info: #6366f1;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
-}
-.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 12px; }
-header h1 { margin: 0 0 4px 0; font-size: 22px; font-weight: 700; }
-header .subtitle { color: var(--muted); font-size: 13px; }
-header .meta { text-align: right; font-size: 12px; color: var(--muted); }
-header .meta .date { font-size: 14px; color: var(--text); font-weight: 600; }
-.refresh-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--primary-bg); color: var(--primary); border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 4px; }
-.refresh-badge.live::before { content: ''; width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-nav.tabs { display: flex; gap: 4px; margin: 16px 0 24px 0; border-bottom: 2px solid var(--border); overflow-x: auto; padding-bottom: 0; }
-nav.tabs button { background: none; border: none; padding: 12px 20px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-radius: 8px 8px 0 0; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: all 0.15s; }
-nav.tabs button:hover { color: var(--text); background: var(--card); }
-nav.tabs button.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--card); }
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.3s; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-section { margin-bottom: 32px; }
-h2 { font-size: 18px; margin: 0 0 16px 0; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-h2::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--primary); border-radius: 2px; }
-h2.projetos::before { background: var(--info); }
-h2.acao::before { background: var(--danger); }
-h2.cohort::before { background: var(--success); }
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px; }
-.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; font-weight: 600; }
-.kpi .value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-.kpi .sub { font-size: 12px; color: var(--muted); }
-.kpi.success .value { color: var(--success); }
-.kpi.warn .value { color: var(--warn); }
-.kpi.danger .value { color: var(--danger); }
-.kpi.primary .value { color: var(--primary); }
-.kpi.info .value { color: var(--info); }
-.kpi-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
-.kpi-bar > div { height: 100%; border-radius: 2px; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-@media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.card h3 { margin: 0 0 16px 0; font-size: 15px; font-weight: 700; }
-.card-sub { font-size: 12px; color: var(--muted); margin-top: -10px; margin-bottom: 16px; }
-.chart-wrapper { position: relative; height: 280px; }
-.chart-wrapper.tall { height: 360px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; font-weight: 600; color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.3px; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg); }
-td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-tr:last-child td { border-bottom: none; }
-.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-.badge.success { background: #d1fae5; color: #065f46; }
-.badge.warn { background: #fef3c7; color: #92400e; }
-.badge.danger { background: #fee2e2; color: #991b1b; }
-.badge.info { background: #e0e7ff; color: #3730a3; }
-.badge.neutral { background: #f3f4f6; color: #374151; }
-.action-list { display: grid; gap: 12px; }
-.action-item { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--danger); border-radius: 8px; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
-.action-item.warn { border-left-color: var(--warn); }
-.action-item.info { border-left-color: var(--info); }
-.action-item.success { border-left-color: var(--success); }
-.action-item .priority { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; background: #fee2e2; color: #991b1b; white-space: nowrap; }
-.action-item.warn .priority { background: #fef3c7; color: #92400e; }
-.action-item.info .priority { background: #e0e7ff; color: #3730a3; }
-.action-item.success .priority { background: #d1fae5; color: #065f46; }
-.action-item .body { display: grid; gap: 4px; }
-.action-item .body .title { font-weight: 700; font-size: 14px; }
-.action-item .body .desc { color: var(--muted); font-size: 13px; }
-.action-item .body .metric { font-size: 12px; color: var(--text); margin-top: 4px; }
-.action-item .impact { font-size: 12px; color: var(--muted); text-align: right; max-width: 200px; }
-footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); text-align: center; }
-.split-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: grid; gap: 12px; }
-.split-card h4 { margin: 0; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-.split-row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.split-row:last-child { border-bottom: none; }
-.split-row .name { font-weight: 600; }
-.split-row .value { font-variant-numeric: tabular-nums; font-weight: 700; }
-.alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
-.alert.warn { background: #fef3c7; color: #92400e; border-left: 4px solid var(--warn); }
-.alert.danger { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--danger); }
-.alert.info { background: #e0e7ff; color: #3730a3; border-left: 4px solid var(--info); }
-.alert.success { background: #d1fae5; color: #065f46; border-left: 4px solid var(--success); }
-.gridjs-wrapper { box-shadow: none !important; border: 1px solid var(--border) !important; }
-.gridjs-table { font-size: 12px !important; }
-.gridjs-th { background: var(--bg) !important; }
-.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.legend-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-.legend-pills span { font-size: 11px; padding: 4px 10px; border-radius: 12px; background: var(--bg); color: var(--muted); }
-</style>
-</head>
-<body>
-<div class="container">
-
-<header>
-  <div>
-    <h1>Painel Operacional Connectabil</h1>
-    <div class="subtitle">Comercial · Projetos · Cohorts · Operações</div>
-    <div class="refresh-badge live" id="refresh-status">Atualizado em 31/05/2026 08:30 (fechamento) 18:30 (fechamento)</div>
-  </div>
-  <div class="meta">
-    <div class="date">Maio / 2026</div>
-    <div>Mês ativo · 20 de 20 dias úteis</div>
-    <div>Fontes: 4 planilhas conectadas</div>
-  </div>
-</header>
-
-<nav class="tabs">
-  <button class="tab active" data-tab="main">Dashboard</button>
-  <button class="tab" data-tab="sales">Sales</button>
-  <button class="tab" data-tab="projetos">Projetos</button>
-  <button class="tab" data-tab="cohorts">Cohorts</button>
-  <button class="tab" data-tab="vagas">Vagas em Jogo</button>
-  <button class="tab" data-tab="insights">Insights</button>
-  <button class="tab" data-tab="historico">Histórico</button>
-</nav>
-
-<!-- ====================== TAB 1: DASHBOARD PRINCIPAL ====================== -->
-<div class="tab-content active" id="tab-main">
-
-<section>
-  <h2>Visão do Mês — Maio/2026</h2>
-  <div class="kpi-grid">
-    <div class="kpi primary">
-      <div class="label">Vendas Realizadas (Geral)</div>
-      <div class="value">R$ 212.674</div>
-      <div class="sub">Meta R$ 267.000 · 77,6%</div>
-      <div class="kpi-bar"><div style="width:77.6%; background:var(--primary)"></div></div>
-    </div>
-    <div class="kpi primary">
-      <div class="label">Vendas Transacional</div>
-      <div class="value">R$ 178.690</div>
-      <div class="sub">Meta R$ 242.000 · 50,3%</div>
-      <div class="kpi-bar"><div style="width:50.3%; background:var(--primary)"></div></div>
-    </div>
-    <div class="kpi success">
-      <div class="label">Vendas SaaS</div>
-      <div class="value">R$ 33.984</div>
-      <div class="sub">Meta R$ 25.000 · 118,2%</div>
-      <div class="kpi-bar"><div style="width:100%; background:var(--success)"></div></div>
-    </div>
-    <div class="kpi warn">
-      <div class="label">Tendência</div>
-      <div class="value">R$ 188.970</div>
-      <div class="sub">Gap projetado: -R$ 78.030</div>
-    </div>
-  </div>
-
-  <div class="kpi-grid">
-    <div class="kpi">
-      <div class="label">Honorários Faturados</div>
-      <div class="value">R$ 177.794</div>
-      <div class="sub">92% do potencial · R$ 13.500 em jogo</div>
-    </div>
-    <div class="kpi primary">
-      <div class="label">— Abertura</div>
-      <div class="value" style="font-size:20px;">R$ 73.781</div>
-      <div class="sub">44% · aberturas mês</div>
-    </div>
-    <div class="kpi info">
-      <div class="label">— Shortlist</div>
-      <div class="value" style="font-size:20px;">R$ 94.863</div>
-      <div class="sub">87% · Aline</div>
-    </div>
-    <div class="kpi success">
-      <div class="label">— Finalização</div>
-      <div class="value" style="font-size:20px;">R$ 9.150</div>
-      <div class="sub">5% · 52 vagas fechadas</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Metas por Líder de Operação</h2>
-  <div class="alert info">
-    <strong>Status do mês:</strong> 20 dias úteis decorridos · 0 restantes. Mês encerrado..
-  </div>
-  <div class="grid-2">
-    <div class="card" style="border-top:4px solid var(--primary);">
-      <h3>Suellen — Sales · Abertura</h3>
-      <div class="card-sub">Meta R$ 6.000/dia útil · R$ 120.000 no mês</div>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;">
-          <div class="label">Realizado</div>
-          <div class="value" style="font-size:20px;">R$ 73.781</div>
-          <div class="sub">61,5% da meta</div>
-        </div>
-        <div class="kpi danger" style="padding:12px;">
-          <div class="label">Delta vs ritmo</div>
-          <div class="value" style="font-size:20px;">-R$ 39.219</div>
-          <div class="sub">vs meta 19d R$ 114.000</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Faltam</div>
-          <div class="value" style="font-size:20px;">R$ 46.219</div>
-          <div class="sub">em 1 dia útil</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Ritmo necessário</div>
-          <div class="value" style="font-size:20px;">R$ 46.219/dia</div>
-          <div class="sub">+680% sobre meta diária</div>
-        </div>
-      </div>
-      <div class="chart-wrapper" style="margin-top:16px;"><canvas id="chartSuellen"></canvas></div>
-    </div>
-    <div class="card" style="border-top:4px solid var(--info);">
-      <h3>Aline — Projetos · Shortlist + Finalização</h3>
-      <div class="card-sub">Meta R$ 6.000/dia útil · R$ 120.000 no mês</div>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;">
-          <div class="label">Realizado</div>
-          <div class="value" style="font-size:20px;">R$ 104.013</div>
-          <div class="sub">86,7% da meta</div>
-        </div>
-        <div class="kpi danger" style="padding:12px;">
-          <div class="label">Delta vs ritmo</div>
-          <div class="value" style="font-size:20px;">-R$ 9.913</div>
-          <div class="sub">vs meta 19d R$ 114.000</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Faltam</div>
-          <div class="value" style="font-size:20px;">R$ 15.987</div>
-          <div class="sub">em 1 dia útil</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Ritmo necessário</div>
-          <div class="value" style="font-size:20px;">R$ 15.987/dia</div>
-          <div class="sub">+318% sobre meta diária</div>
-        </div>
-      </div>
-      <div class="chart-wrapper" style="margin-top:16px;"><canvas id="chartAline"></canvas></div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:16px;">
-    <h3>Projeção Diária — Próximos 4 Dias Úteis</h3>
-    <div class="card-sub">Volume necessário para fechar metas — cenário de recuperação linear</div>
-    <table>
-      <thead><tr><th>Dia</th><th>Data</th><th>Suellen (Abertura)</th><th>Aline (Short+Final)</th><th>Total</th><th>Acumulado mês</th></tr></thead>
-      <tbody>
-        <tr><td>Sexta</td><td>29/05</td><td>R$ 46.219</td><td>R$ 15.987</td><td><strong>R$ 71.872</strong></td><td>R$ 240.000</td></tr>
-
-
-
-        <tr style="background:#f3f4f6; font-weight:700;"><td colspan="2">Total a entregar</td><td>R$ 72.828</td><td>R$ 49.464</td><td>R$ 122.292</td><td>R$ 240.003</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section>
-  <h2>Operacional · Status Atual</h2>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">Vagas Trabalhadas</div><div class="value">143</div><div class="sub">44 fechadas · 23 canceladas · 85 ativas</div></div>
-    <div class="kpi danger"><div class="label">Vagas "Enviar Novos"</div><div class="value">55</div><div class="sub">65% das ativas paradas</div></div>
-    <div class="kpi"><div class="label">SIMs Realizados</div><div class="value">55 / 66</div><div class="sub">83% da meta · faltam 11</div></div>
-    <div class="kpi"><div class="label">% Aproveitamento</div><div class="value">30,8%</div><div class="sub">Histórico 12m: 46%</div></div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 2: SALES ====================== -->
-<div class="tab-content" id="tab-sales">
-
-<section>
-  <h2>Sales — Performance Detalhada</h2>
-  <div class="kpi-grid">
-    <div class="kpi primary"><div class="label">Vendas Realizadas</div><div class="value">R$ 151.176</div><div class="sub">Meta R$ 267.000 · 56,6%</div></div>
-    <div class="kpi info"><div class="label">Ticket Médio Transacional</div><div class="value">R$ 4.617</div><div class="sub">Novos R$ 4.233 · Rec R$ 4.834</div></div>
-    <div class="kpi"><div class="label">Vagas Abertas no Mês</div><div class="value">37</div><div class="sub">12 novos · 25 recorrentes</div></div>
-    <div class="kpi success"><div class="label">Cross-Sell SaaS</div><div class="value">3</div><div class="sub">R$ 33.984 (ticket R$ 9.852)</div></div>
-  </div>
-</section>
-
-<section>
-  <h2>Histórico 2026 · Meta x Realizado</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Evolução mensal — Geral</h3>
-      <div class="card-sub">Janeiro a Maio · Transacional + SaaS</div>
-      <div class="chart-wrapper"><canvas id="chartSalesHistorico"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Quebra por linha</h3>
-      <div class="card-sub">Transacional × SaaS — maio/26</div>
-      <div class="chart-wrapper"><canvas id="chartSalesLinha"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Performance Individual · Inside Sales</h2>
-  <div class="grid-2">
-    <div class="card" style="border-top:4px solid var(--primary);">
-      <h3>Vanuza</h3>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;"><div class="label">Meta Mensal</div><div class="value" style="font-size:18px;">R$ 198.737</div></div>
-        <div class="kpi primary" style="padding:12px;"><div class="label">Realizado</div><div class="value" style="font-size:18px;">R$ 117.288</div><div class="sub">59,95% ritmo</div></div>
-        <div class="kpi warn" style="padding:12px;"><div class="label">Falta</div><div class="value" style="font-size:18px;">R$ 81.449</div></div>
-        <div class="kpi info" style="padding:12px;"><div class="label">Tendência</div><div class="value" style="font-size:18px;">R$ 119.138</div><div class="sub">60% da meta</div></div>
-      </div>
-      <div style="margin-top:12px;"><div class="kpi-bar"><div style="width:44.96%; background:var(--primary)"></div></div></div>
-      <table style="margin-top:14px;">
-        <tr><td><strong>Meta Semestre</strong></td><td>R$ 1.000.000</td></tr>
-        <tr><td><strong>Executado Semestre</strong></td><td>R$ 421.197</td></tr>
-        <tr><td><strong>Conversão Lead/Venda</strong></td><td>15%</td></tr>
-        <tr><td><strong>Conversão Perdido</strong></td><td>54%</td></tr>
-      </table>
-    </div>
-    <div class="card" style="border-top:4px solid var(--info);">
-      <h3>Thalita</h3>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;"><div class="label">Meta Mensal</div><div class="value" style="font-size:18px;">R$ 74.000</div></div>
-        <div class="kpi info" style="padding:12px;"><div class="label">Realizado</div><div class="value" style="font-size:18px;">R$ 51.090</div><div class="sub">50,9%</div></div>
-        <div class="kpi warn" style="padding:12px;"><div class="label">Falta</div><div class="value" style="font-size:18px;">R$ 22.910</div></div>
-        <div class="kpi" style="padding:12px;"><div class="label">Tendência</div><div class="value" style="font-size:18px;">R$ 50.225</div><div class="sub">68% da meta</div></div>
-      </div>
-      <div style="margin-top:12px;"><div class="kpi-bar"><div style="width:50.9%; background:var(--info)"></div></div></div>
-      <table style="margin-top:14px;">
-        <tr><td><strong>Conversão Lead/Venda</strong></td><td>0%</td></tr>
-        <tr><td><strong>Conversão Perdido</strong></td><td>25%</td></tr>
-        <tr><td><strong>Captou em Roleta</strong></td><td>4 leads (3 negoc · 1 perdido)</td></tr>
-        <tr><td><strong>Vagas Abertas</strong></td><td>37 vagas abertas (Transacional)</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="grid-2" style="margin-top:16px;">
-    <div class="card">
-      <h3>Pipeline da Roleta — Maio/26</h3>
-      <div class="card-sub">Distribuição dos 17 leads recebidos</div>
-      <div class="chart-wrapper"><canvas id="chartPipeline"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Origens das Vendas (Transacional)</h3>
-      <div class="card-sub">Por canal de captação · maio/26</div>
-      <div class="chart-wrapper"><canvas id="chartOrigens"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Composição da Receita</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Por tipo de cliente</h3>
-      <div class="chart-wrapper"><canvas id="chartComposicao"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Métricas Comerciais — Maio/26</h3>
-      <table>
-        <tr><td>Transacional Recorrente</td><td><strong>R$ 128.840</strong></td><td>25 clientes</td></tr>
-        <tr><td>Transacional Novo</td><td><strong>R$ 48.700</strong></td><td>12 clientes</td></tr>
-        <tr><td>SaaS Cross-Sell</td><td><strong>R$ 33.984</strong></td><td>3 contratos</td></tr>
-        <tr><td>SaaS Novo</td><td>R$ 0</td><td>3 fechados (sem MRR ainda)</td></tr>
-        <tr style="background:#f9fafb"><td><strong>Total Realizado</strong></td><td><strong>R$ 212.674</strong></td><td>40 clientes únicos</td></tr>
-      </table>
-      <div class="alert warn" style="margin-top:16px;">
-        <strong>Atenção:</strong> Conversão de leads perdidos em 47% (média). Vanuza 54% · Thalita 25%. Indica desafios de qualificação ou follow-up.
-      </div>
-    </div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 3: PROJETOS ====================== -->
-<div class="tab-content" id="tab-projetos">
-
-<section>
-  <h2 class="projetos">Projetos — Operação de Vagas</h2>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">Vagas Trabalhadas</div><div class="value">143</div><div class="sub">+32% vs abr (108)</div></div>
-    <div class="kpi success"><div class="label">Fechadas (SIMs)</div><div class="value">55</div><div class="sub">Meta mês 66 · 83%</div></div>
-    <div class="kpi danger"><div class="label">Canceladas</div><div class="value">22</div><div class="sub">15% do volume</div></div>
-    <div class="kpi info"><div class="label">Ativas (em andamento)</div><div class="value">85</div><div class="sub">55 paradas em "Enviar Novos"</div></div>
-  </div>
-</section>
-
-<section>
-  <h2 class="projetos">Performance por Squad</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Volume por Squad</h3>
-      <div class="card-sub">Trabalhadas, fechadas e paradas em "Enviar Novos"</div>
-      <div class="chart-wrapper tall"><canvas id="chartSquads"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Status Daily Operacional</h3>
-      <div class="card-sub">Distribuição dos 100 ativos em maio</div>
-      <div class="chart-wrapper tall"><canvas id="chartDaily"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2 class="projetos">Performance Individual · Especialistas</h2>
-  <div class="card">
-    <table>
-      <thead><tr><th>Especialista</th><th>Squad</th><th>Trabalhadas</th><th>SIMs (fechadas)</th><th>Meta SIMs</th><th>Atingimento</th><th>Faturamento Mensal</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Thaiz</strong></td><td><span class="badge info">Estratégicos</span></td><td>8</td><td>18</td><td>8</td><td><span class="badge success">225%</span></td><td>R$ 6.900</td></tr>
-        <tr><td><strong>Isabelle</strong></td><td><span class="badge info">Core</span></td><td>24</td><td>21</td><td>24</td><td><span class="badge warn">88%</span></td><td>R$ 31.937</td></tr>
-        <tr><td><strong>Vittória</strong></td><td><span class="badge info">Brasil</span></td><td>17</td><td>8</td><td>17</td><td><span class="badge danger">47%</span></td><td>R$ 14.265</td></tr>
-        <tr><td><strong>Carla</strong></td><td><span class="badge info">Expansão</span></td><td>17</td><td>8</td><td>17</td><td><span class="badge danger">47%</span></td><td>R$ 29.169</td></tr>
-        <tr style="background:#f9fafb"><td colspan="3"><strong>Total time</strong></td><td><strong>55</strong></td><td><strong>66</strong></td><td><strong>83%</strong></td><td><strong>R$ 82.271</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="grid-2" style="margin-top:16px;">
-    <div class="card">
-      <h3>Time G.O. (Listas)</h3>
-      <div class="card-sub">Performance individual no mês · Meta total 102 SIMs</div>
-      <table>
-        <thead><tr><th>G.O.</th><th>Meta</th><th>Realizado</th><th>%</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Tifanny</strong></td><td>12</td><td>11</td><td><span class="badge success">92%</span></td></tr>
-          <tr><td><strong>Camila</strong></td><td>26</td><td>15</td><td><span class="badge warn">58%</span></td></tr>
-          <tr><td><strong>Adriele</strong></td><td>26</td><td>18</td><td><span class="badge warn">69%</span></td></tr>
-          <tr><td><strong>Érika</strong></td><td>26</td><td>14</td><td><span class="badge warn">54%</span></td></tr>
-          <tr><td><strong>Isabela</strong></td><td>12</td><td>5</td><td><span class="badge danger">42%</span></td></tr>
-          <tr style="background:#f3f4f6"><td><strong>TOTAL</strong></td><td><strong>102</strong></td><td><strong>63</strong></td><td><span class="badge warn"><strong>62%</strong></span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <h3>Funil de Candidatos · Maio</h3>
-      <div class="card-sub">Volume da operação G.O.</div>
-      <table>
-        <tr><td>Candidatos abordados</td><td><strong>596</strong></td></tr>
-        <tr><td>Candidatos agendados</td><td><strong>35</strong></td></tr>
-        <tr><td>Enviados (shortlist)</td><td><strong>64</strong></td></tr>
-        <tr><td>Aprovados pelo cliente</td><td><strong>8</strong></td></tr>
-        <tr><td>Taxa de aprovação</td><td><strong>12,5%</strong> (vs 24,8% em mar)</td></tr>
-      </table>
-      <div class="alert warn" style="margin-top:12px;">
-        <strong>Conversão piorou:</strong> taxa de aprovação caiu de 24,8% (mar) para 12,9% (mai). Revisar curadoria inicial e fit cultural.
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2 class="projetos">Honorários por Tipo de Cobrança</h2>
-  <div class="card">
-    <div class="card-sub">Histórico Mar a Mai · breakdown Abertura / Shortlist / Finalização</div>
-    <div class="chart-wrapper"><canvas id="chartHonorarios"></canvas></div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 4: COHORTS ====================== -->
-<div class="tab-content" id="tab-cohorts">
-
-<section>
-  <h2 class="cohort">Cohorts · Indicadores Financeiros e Projeções</h2>
-  <div class="alert info">
-    <strong>O que mostra esta aba:</strong> análise de saúde do funil, retenção de clientes, eficiência de custos, e projeção do mês com base no comportamento histórico.
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi success"><div class="label">Margem Bruta — Projetos</div><div class="value">84%</div><div class="sub">R$ 99k receita · R$ 19k custo time</div></div>
-    <div class="kpi info"><div class="label">CAC equivalente Sales</div><div class="value">R$ 1.483</div><div class="sub">R$ 17,8k custo / 12 fechados</div></div>
-    <div class="kpi warn"><div class="label">LTV/CAC estimado</div><div class="value">3,1x</div><div class="sub">Recorrentes · 60% retornam 12m</div></div>
-    <div class="kpi"><div class="label">Receita / FTE Projetos</div><div class="value">R$ 23.542</div><div class="sub">5 especialistas no time</div></div>
-  </div>
-</section>
-
-<section>
-  <h2 class="cohort">Comportamento Histórico · 13 Meses</h2>
-  <div class="card">
-    <h3>Receita Projetos × Sales · maio/25 a maio/26</h3>
-    <div class="card-sub">Evolução mensal e sazonalidade</div>
-    <div class="chart-wrapper tall"><canvas id="chartCohortReceita"></canvas></div>
-  </div>
-</section>
-
-<section>
-  <h2 class="cohort">Eficiência por Cohort</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>% Aproveitamento · Projetos</h3>
-      <div class="card-sub">SLA vagas fechadas vs trabalhadas</div>
-      <div class="chart-wrapper"><canvas id="chartAproveitamento"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Custo do Time vs Receita</h3>
-      <div class="card-sub">Investimento operacional 12m</div>
-      <div class="chart-wrapper"><canvas id="chartCusto"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2 class="cohort">Projeção · Fim de Maio e Junho/2026</h2>
-  <div class="card">
-    <table>
-      <thead><tr><th>Cenário</th><th>Receita Sales</th><th>Honorários Projetos</th><th>Total</th><th>vs Meta</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Otimista (recuperação total)</strong></td>
-          <td>R$ 267.000</td>
-          <td>R$ 159.582</td>
-          <td><strong>R$ 426.582</strong></td>
-          <td><span class="badge success">100% combinada</span></td>
-        </tr>
-        <tr>
-          <td><strong>Realista (mantém ritmo)</strong></td>
-          <td>R$ 201.568</td>
-          <td>R$ 148.000</td>
-          <td><strong>R$ 349.568</strong></td>
-          <td><span class="badge warn">85%</span></td>
-        </tr>
-        <tr>
-          <td><strong>Pessimista (gargalo persiste)</strong></td>
-          <td>R$ 165.000</td>
-          <td>R$ 110.000</td>
-          <td><strong>R$ 275.000</strong></td>
-          <td><span class="badge danger">64%</span></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="alert warn" style="margin-top:16px;">
-      <strong>Insight:</strong> nos últimos 12 meses, abril foi o mês de pico (R$ 207k Sales · R$ 187k Projetos). Maio histórico tem média de R$ 175k · 2025 fechou em R$ 169k. Estamos em risco de ficar abaixo do mesmo mês do ano passado.
-    </div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 5: VAGAS EM JOGO ====================== -->
-<div class="tab-content" id="tab-vagas">
-
-<section>
-  <h2 class="projetos">Vagas com Faturamento em Jogo</h2>
-  <div class="alert info">
-    <strong>O que está aqui:</strong> 46 vagas ativas em maio/26 com potencial de geração de receita por <em>Shortlist</em> ou <em>Finalização</em>. Filtre, ordene e identifique as prioridades.
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">Total de Vagas Ativas</div><div class="value">87</div><div class="sub">R$ 42.648 em potencial</div></div>
-    <div class="kpi danger"><div class="label">Em "Enviar Novos"</div><div class="value">58</div><div class="sub">Bloqueando R$ 20-35k</div></div>
-    <div class="kpi warn"><div class="label">&gt; 60 dias abertas</div><div class="value">15+</div><div class="sub">Alto risco de cancelamento</div></div>
-    <div class="kpi success"><div class="label">Próximas de Fechar</div><div class="value">12</div><div class="sub">Aguard. feedback + entrev.</div></div>
-  </div>
-
-  <div class="legend-pills">
-    <span><span class="badge danger">Crítica</span> &gt; 60 dias em "Enviar Novos"</span>
-    <span><span class="badge warn">Atenção</span> em risco</span>
-    <span><span class="badge info">Em andamento</span></span>
-    <span><span class="badge success">Próx. fechamento</span></span>
-  </div>
-
-  <div class="card">
-    <h3>Top Vagas — por idade e potencial de faturamento</h3>
-    <div class="card-sub">Ordenado por data de abertura. Coluna "Potencial" mostra valor que ainda pode ser cobrado (Shortlist + Finalização).</div>
-    <div id="grid-vagas"></div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 6: INSIGHTS ====================== -->
-<div class="tab-content" id="tab-insights">
-
-<section>
-  <h2 class="acao">Insights · O Que Precisa Acontecer Para Bater a Meta</h2>
-  <div class="alert danger">
-    <strong>Sumário:</strong> maio encerrou (último dia útil 30/05). Projetos encerrou maio com R$ 177.794 realizados (meta R$ 132k, +35%). SIMs: 55/66 = 83%. Sales: R$ 212.674 vs meta R$ 267k (80%). Thaiz foi destaque com 225% SIMs. Isabelle atingiu 88%. Vittória e Carla fecharam em 47%.
-  </div>
-
-  <div class="action-list">
-
-    <div class="action-item">
-      <div class="priority">Crítico</div>
-      <div class="body">
-        <div class="title">1. Destravar o gargalo "Enviar Novos" — 58 vagas paradas</div>
-        <div class="desc">67% das vagas ativas estão paradas aguardando candidatos. Bloqueia tanto Aline (precisa de shortlist) quanto Suellen (não abre novas se o estoque empata).</div>
-        <div class="metric"><strong>Ação imediata:</strong> sessão de priorização hoje com Camila + 4 especialistas. Definir top 30 vagas para inundar de candidatos nas próximas 48h. Acionar Adriele e Érika com lista pronta de empresas para abordagem ativa.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>R$ 30-50k</strong><br>destravados</div>
-    </div>
-
-    <div class="action-item">
-      <div class="priority">Crítico</div>
-      <div class="body">
-        <div class="title">2. Reativar os 8 leads "perdidos" da Roleta</div>
-        <div class="desc">Vanuza está perdendo 54% dos leads — número alto. Há 8 leads marcados como perdidos em maio que podem ser revisitados com proposta ajustada.</div>
-        <div class="metric"><strong>Ação imediata:</strong> Vanuza liga para cada um nesta semana. Oferecer crédito, ajuste de prazo ou produto. Meta: converter 3 dos 8 (R$ 12-15k).</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>R$ 12-15k</strong></div>
-    </div>
-
-    <div class="action-item">
-      <div class="priority">Crítico</div>
-      <div class="body">
-        <div class="title">3. Fechar os 7 em negociação até quinta (28/05)</div>
-        <div class="desc">Pipeline tem 7 leads quentes em negociação. Histórico de conversão 15% — neste momento, é necessário converter pelo menos 40% para fechar o mês.</div>
-        <div class="metric"><strong>Ação imediata:</strong> Vanuza + Thalita reservam 2h/dia para follow-up dedicado. Suellen liga em casos de não-resposta. Sem desconto além de 10%.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>R$ 25-35k</strong></div>
-    </div>
-
-    <div class="action-item warn">
-      <div class="priority">Atenção</div>
-      <div class="body">
-        <div class="title">4. Squad Estratégicos (Thaiz) superou meta — replicar modelo</div>
-        <div class="desc">Thaiz atingiu 225% da meta de SIMs (18 de 8) — fechamento do mês. Modelo de abordagem Estratégicos deve ser replicado para outros squads que estão abaixo do ritmo.</div>
-        <div class="metric"><strong>Ação:</strong> alocar Adriele exclusivamente para suportar Thaiz nas próximas 2 semanas. Listar 10 clientes investidor ainda não abordados e iniciar abordagem ativa.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>+R$ 20k</strong><br>até fim do mês</div>
-    </div>
-
-    <div class="action-item warn">
-      <div class="priority">Atenção</div>
-      <div class="body">
-        <div class="title">5. Pipeline G.O. avançou para 62% — manter ritmo Adriele e Tifanny</div>
-        <div class="desc">Time entregou 63 SIMs de meta 102. Adriele (69%) e Tifanny (92%) puxam para cima. Érika (54%) e Isabela (42%) ainda abaixo do ritmo e gerando gargalo em "Enviar Novos".</div>
-        <div class="metric"><strong>Ação:</strong> pareamento diário com Camila pelas próximas 2 semanas. Revisão de carga e prioridades. SLA de 12h para curadoria inicial.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>+30% throughput</strong></div>
-    </div>
-
-    <div class="action-item warn">
-      <div class="priority">Atenção</div>
-      <div class="body">
-        <div class="title">6. Vagas envelhecidas (&gt;60 dias) — decisão até semana</div>
-        <div class="desc">15+ vagas com 1º envio em Jan/Fev/26 ainda em "Enviar Novos". Risco de cancelamento e queima de relacionamento.</div>
-        <div class="metric"><strong>Ação:</strong> CS liga cada cliente. Ajustar perfil/salário, propor crédito ou migração para SaaS. Decisão final até 27/05.</div>
-      </div>
-      <div class="impact">Evitar<br><strong>R$ 40k+</strong><br>em cancelamentos</div>
-    </div>
-
-    <div class="action-item info">
-      <div class="priority">Oportunidade</div>
-      <div class="body">
-        <div class="title">7. Cross-Sell SaaS para base recorrente</div>
-        <div class="desc">SaaS já bateu meta de maio (100,5%). Há 100+ clientes Transacionais ativos sem SaaS — terreno fértil para R$ 369-618 MRR/cliente.</div>
-        <div class="metric"><strong>Ação:</strong> Vanuza/Thalita montam lista de top 20 clientes ativos sem SaaS. Campanha rápida na semana de 26-29/05.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>+R$ 7-15k MRR</strong></div>
-    </div>
-
-    <div class="action-item success">
-      <div class="priority">Insight</div>
-      <div class="body">
-        <div class="title">8. Maio histórico era o mês fraco — antecipar 2027</div>
-        <div class="desc">Olhando 12 meses: maio/25 fechou em R$ 169k (Sales) e foi mês mediano. 2026 precisa quebrar o padrão. Outubro foi o pico de 2025 (R$ 234k).</div>
-        <div class="metric"><strong>Ação estratégica:</strong> redesenhar roteiro comercial para que maio seja prospecção forte com fechamento concentrado em junho. Lançar projeto de indicações antes de junho.</div>
-      </div>
-      <div class="impact">Impacto:<br>tendência<br>estrutural</div>
-    </div>
-
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 7: HISTÓRICO ====================== -->
-<div class="tab-content" id="tab-historico">
-
-<section>
-  <h2>Histórico de Operações · 13 Meses</h2>
-  <div class="card-sub" style="margin-bottom:16px;">Dados consolidados da planilha <em>[Operações] - Painel Estratégico 2026</em> · maio/25 a maio/26</div>
-
-  <div class="grid-3">
-    <div class="card">
-      <h3>Sales · Volume</h3>
-      <div class="chart-wrapper"><canvas id="chartHistSalesVol"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Projetos · SIMs</h3>
-      <div class="chart-wrapper"><canvas id="chartHistSims"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>G.O. · Abordagem</h3>
-      <div class="chart-wrapper"><canvas id="chartHistGo"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Tabela Completa · KPIs Mensais</h2>
-  <div class="card">
-    <div id="grid-historico"></div>
-  </div>
-</section>
-
-<section>
-  <h2>Dinâmica do Time</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Tamanho do time · Projetos</h3>
-      <div class="card-sub">Evolução do headcount nos últimos 12 meses</div>
-      <div class="chart-wrapper"><canvas id="chartHistTime"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Custo do time × Receita gerada</h3>
-      <div class="card-sub">Investimento operacional vs retorno</div>
-      <div class="chart-wrapper"><canvas id="chartHistCusto"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Insights do Histórico</h2>
-  <div class="action-list">
-    <div class="action-item info">
-      <div class="priority">Histórico</div>
-      <div class="body">
-        <div class="title">Pico de receita: Julho/25 (R$ 260k Sales · R$ 205k Projetos)</div>
-        <div class="desc">Julho foi disparadamente o melhor mês. Combinação de 71 vagas abertas + 73 SIMs entregues. Análise sazonal vale ouro para 2026.</div>
-      </div>
-      <div class="impact">Replicar<br>padrão em jun-jul</div>
-    </div>
-    <div class="action-item warn">
-      <div class="priority">Risco</div>
-      <div class="body">
-        <div class="title">Time reduziu de 8 → 4 → 5 pessoas em Projetos</div>
-        <div class="desc">Headcount caiu 50% entre setembro/25 e jan/26. Recente recomposição para 5. Custo do time caiu de R$ 39k para R$ 19k/mês, mas eficiência por pessoa também caiu.</div>
-      </div>
-      <div class="impact">Receita/pessoa<br>caiu 32%</div>
-    </div>
-    <div class="action-item warn">
-      <div class="priority">Alerta</div>
-      <div class="body">
-        <div class="title">% de aproveitamento despencou</div>
-        <div class="desc">De 69% (maio/25) para 31,9% (maio/26). Volume de vagas trabalhadas cresceu (163 em maio vs 115 em maio/25), mas conversão para fechamento caiu. Possível overbooking do time.</div>
-      </div>
-      <div class="impact">Sinal de<br>queda de qualidade</div>
-    </div>
-  </div>
-</section>
-
-</div>
-
-<footer>
-  Painel gerado a partir de 4 planilhas conectadas via Google Drive.<br>
-  Atualize manualmente pelo botão de Reload do Cowork (recolhe os dados mais recentes das planilhas).
-</footer>
-
-</div>
-
-<script>
-// ===== DATA EMBARCADA =====
-const DATA = {
-  ultimaAtualizacao: '30/05/2026',
-  diasUteisMes: 20,
-  diasUteisDecorridos: 20,
-  diasUteisRestantes: 0,
-  // Histórico do Painel Estratégico
-  historico: {
-    meses: ['mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25','jan/26','fev/26','mar/26','abr/26','mai/26'],
-    projetos: {
-      sims: [80,49,73,56,61,44,43,49,36,39,59,44,52],
-      receita: [201199,149407,205719,143152,184941,165053,134550,129907,159999,114591,168136,145320,168128],
-      pessoas: [8,8,8,8,6,6,6,6,4,4,4,5,5],
-      custo: [39611,39611,39611,39611,28340,28340,28340,28340,28340,19000,19000,19000,19000],
-      sla: [18,22,20,24,19,19,16,9,19,13,29,36,28],
-      vagasTrab: [115,113,134,104,102,95,93,71,78,108,179,160,163],
-      vagasCanc: [21,9,10,18,11,14,15,10,15,15,27,20,23],
-      aproveit: [69.57,43.36,54.48,53.85,59.80,46.32,46.24,69.01,46.15,36.11,32.96,27.50,31.90]
-    },
-    go: {
-      abordados: [null,null,null,null,2548,1545,1509,2958,2558,3904,4485,2474,2474],
-      enviados: [81,57,46,51,67,57,41,37,26,66,129,85,27],
-      aprovados: [null,null,null,null,null,null,null,null,null,11,32,11,11],
-      custo: [5400,5400,5400,5400,5400,5400,5400,5400,5400,9900,9900,9900,9900]
-    },
-    sales: {
-      novos: [10,14,25,14,16,11,8,7,20,17,17,17,15],
-      recorrentes: [31,37,40,30,32,27,26,23,36,46,48,11,25],
-      unicos: [41,51,65,44,48,38,34,30,56,63,65,28,40],
-      vagasAbertas: [54,55,71,42,64,65,54,30,62,48,79,57,37],
-      valorContrato: [169602,195037,260569,165372,228936,234532,156732,133226,151030,194444,205157,207224,212674],
-      custoTime: [28720,22058,9218,17242,24137,31241,24192,21192,22294,17602,17798,17798,17798]
-    }
-  },
-  // Lista de vagas em jogo
-  DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Connectabil — Comercial & Projetos</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
-<style>
-:root {
-  color-scheme: light;
-  --bg: #f7f8fb;
-  --card: #ffffff;
-  --border: #e5e7ee;
-  --text: #1a1f36;
-  --muted: #6b7280;
-  --primary: #2563eb;
-  --primary-bg: #eff6ff;
-  --success: #10b981;
-  --warn: #f59e0b;
-  --danger: #ef4444;
-  --info: #6366f1;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
-}
-.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 12px; }
-header h1 { margin: 0 0 4px 0; font-size: 22px; font-weight: 700; }
-header .subtitle { color: var(--muted); font-size: 13px; }
-header .meta { text-align: right; font-size: 12px; color: var(--muted); }
-header .meta .date { font-size: 14px; color: var(--text); font-weight: 600; }
-.refresh-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--primary-bg); color: var(--primary); border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 4px; }
-.refresh-badge.live::before { content: ''; width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-nav.tabs { display: flex; gap: 4px; margin: 16px 0 24px 0; border-bottom: 2px solid var(--border); overflow-x: auto; padding-bottom: 0; }
-nav.tabs button { background: none; border: none; padding: 12px 20px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-radius: 8px 8px 0 0; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: all 0.15s; }
-nav.tabs button:hover { color: var(--text); background: var(--card); }
-nav.tabs button.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--card); }
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.3s; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-section { margin-bottom: 32px; }
-h2 { font-size: 18px; margin: 0 0 16px 0; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-h2::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--primary); border-radius: 2px; }
-h2.projetos::before { background: var(--info); }
-h2.acao::before { background: var(--danger); }
-h2.cohort::before { background: var(--success); }
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px; }
-.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; font-weight: 600; }
-.kpi .value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-.kpi .sub { font-size: 12px; color: var(--muted); }
-.kpi.success .value { color: var(--success); }
-.kpi.warn .value { color: var(--warn); }
-.kpi.danger .value { color: var(--danger); }
-.kpi.primary .value { color: var(--primary); }
-.kpi.info .value { color: var(--info); }
-.kpi-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
-.kpi-bar > div { height: 100%; border-radius: 2px; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-@media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.card h3 { margin: 0 0 16px 0; font-size: 15px; font-weight: 700; }
-.card-sub { font-size: 12px; color: var(--muted); margin-top: -10px; margin-bottom: 16px; }
-.chart-wrapper { position: relative; height: 280px; }
-.chart-wrapper.tall { height: 360px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; font-weight: 600; color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.3px; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg); }
-td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-tr:last-child td { border-bottom: none; }
-.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-.badge.success { background: #d1fae5; color: #065f46; }
-.badge.warn { background: #fef3c7; color: #92400e; }
-.badge.danger { background: #fee2e2; color: #991b1b; }
-.badge.info { background: #e0e7ff; color: #3730a3; }
-.badge.neutral { background: #f3f4f6; color: #374151; }
-.action-list { display: grid; gap: 12px; }
-.action-item { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--danger); border-radius: 8px; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
-.action-item.warn { border-left-color: var(--warn); }
-.action-item.info { border-left-color: var(--info); }
-.action-item.success { border-left-color: var(--success); }
-.action-item .priority { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; background: #fee2e2; color: #991b1b; white-space: nowrap; }
-.action-item.warn .priority { background: #fef3c7; color: #92400e; }
-.action-item.info .priority { background: #e0e7ff; color: #3730a3; }
-.action-item.success .priority { background: #d1fae5; color: #065f46; }
-.action-item .body { display: grid; gap: 4px; }
-.action-item .body .title { font-weight: 700; font-size: 14px; }
-.action-item .body .desc { color: var(--muted); font-size: 13px; }
-.action-item .body .metric { font-size: 12px; color: var(--text); margin-top: 4px; }
-.action-item .impact { font-size: 12px; color: var(--muted); text-align: right; max-width: 200px; }
-footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); text-align: center; }
-.split-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: grid; gap: 12px; }
-.split-card h4 { margin: 0; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-.split-row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.split-row:last-child { border-bottom: none; }
-.split-row .name { font-weight: 600; }
-.split-row .value { font-variant-numeric: tabular-nums; font-weight: 700; }
-.alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
-.alert.warn { background: #fef3c7; color: #92400e; border-left: 4px solid var(--warn); }
-.alert.danger { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--danger); }
-.alert.info { background: #e0e7ff; color: #3730a3; border-left: 4px solid var(--info); }
-.alert.success { background: #d1fae5; color: #065f46; border-left: 4px solid var(--success); }
-.gridjs-wrapper { box-shadow: none !important; border: 1px solid var(--border) !important; }
-.gridjs-table { font-size: 12px !important; }
-.gridjs-th { background: var(--bg) !important; }
-.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.legend-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-.legend-pills span { font-size: 11px; padding: 4px 10px; border-radius: 12px; background: var(--bg); color: var(--muted); }
-</style>
-</head>
-<body>
-<div class="container">
-
-<header>
-  <div>
-    <h1>Painel Operacional Connectabil</h1>
-    <div class="subtitle">Comercial · Projetos · Cohorts · Operações</div>
-    <div class="refresh-badge live" id="refresh-status">Atualizado em 31/05/2026 08:30 (fechamento) 18:30 (fechamento)</div>
-  </div>
-  <div class="meta">
-    <div class="date">Maio / 2026</div>
-    <div>Mês ativo · 20 de 20 dias úteis</div>
-    <div>Fontes: 4 planilhas conectadas</div>
-  </div>
-</header>
-
-<nav class="tabs">
-  <button class="tab active" data-tab="main">Dashboard</button>
-  <button class="tab" data-tab="sales">Sales</button>
-  <button class="tab" data-tab="projetos">Projetos</button>
-  <button class="tab" data-tab="cohorts">Cohorts</button>
-  <button class="tab" data-tab="vagas">Vagas em Jogo</button>
-  <button class="tab" data-tab="insights">Insights</button>
-  <button class="tab" data-tab="historico">Histórico</button>
-</nav>
-
-<!-- ====================== TAB 1: DASHBOARD PRINCIPAL ====================== -->
-<div class="tab-content active" id="tab-main">
-
-<section>
-  <h2>Visão do Mês — Maio/2026</h2>
-  <div class="kpi-grid">
-    <div class="kpi primary">
-      <div class="label">Vendas Realizadas (Geral)</div>
-      <div class="value">R$ 212.674</div>
-      <div class="sub">Meta R$ 267.000 · 77,6%</div>
-      <div class="kpi-bar"><div style="width:77.6%; background:var(--primary)"></div></div>
-    </div>
-    <div class="kpi primary">
-      <div class="label">Vendas Transacional</div>
-      <div class="value">R$ 178.690</div>
-      <div class="sub">Meta R$ 242.000 · 50,3%</div>
-      <div class="kpi-bar"><div style="width:50.3%; background:var(--primary)"></div></div>
-    </div>
-    <div class="kpi success">
-      <div class="label">Vendas SaaS</div>
-      <div class="value">R$ 33.984</div>
-      <div class="sub">Meta R$ 25.000 · 118,2%</div>
-      <div class="kpi-bar"><div style="width:100%; background:var(--success)"></div></div>
-    </div>
-    <div class="kpi warn">
-      <div class="label">Tendência</div>
-      <div class="value">R$ 188.970</div>
-      <div class="sub">Gap projetado: -R$ 78.030</div>
-    </div>
-  </div>
-
-  <div class="kpi-grid">
-    <div class="kpi">
-      <div class="label">Honorários Faturados</div>
-      <div class="value">R$ 177.794</div>
-      <div class="sub">92% do potencial · R$ 13.500 em jogo</div>
-    </div>
-    <div class="kpi primary">
-      <div class="label">— Abertura</div>
-      <div class="value" style="font-size:20px;">R$ 73.781</div>
-      <div class="sub">44% · aberturas mês</div>
-    </div>
-    <div class="kpi info">
-      <div class="label">— Shortlist</div>
-      <div class="value" style="font-size:20px;">R$ 94.863</div>
-      <div class="sub">87% · Aline</div>
-    </div>
-    <div class="kpi success">
-      <div class="label">— Finalização</div>
-      <div class="value" style="font-size:20px;">R$ 9.150</div>
-      <div class="sub">5% · 52 vagas fechadas</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Metas por Líder de Operação</h2>
-  <div class="alert info">
-    <strong>Status do mês:</strong> 20 dias úteis decorridos · 0 restantes. Mês encerrado..
-  </div>
-  <div class="grid-2">
-    <div class="card" style="border-top:4px solid var(--primary);">
-      <h3>Suellen — Sales · Abertura</h3>
-      <div class="card-sub">Meta R$ 6.000/dia útil · R$ 120.000 no mês</div>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;">
-          <div class="label">Realizado</div>
-          <div class="value" style="font-size:20px;">R$ 73.781</div>
-          <div class="sub">61,5% da meta</div>
-        </div>
-        <div class="kpi danger" style="padding:12px;">
-          <div class="label">Delta vs ritmo</div>
-          <div class="value" style="font-size:20px;">-R$ 39.219</div>
-          <div class="sub">vs meta 19d R$ 114.000</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Faltam</div>
-          <div class="value" style="font-size:20px;">R$ 46.219</div>
-          <div class="sub">em 1 dia útil</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Ritmo necessário</div>
-          <div class="value" style="font-size:20px;">R$ 46.219/dia</div>
-          <div class="sub">+680% sobre meta diária</div>
-        </div>
-      </div>
-      <div class="chart-wrapper" style="margin-top:16px;"><canvas id="chartSuellen"></canvas></div>
-    </div>
-    <div class="card" style="border-top:4px solid var(--info);">
-      <h3>Aline — Projetos · Shortlist + Finalização</h3>
-      <div class="card-sub">Meta R$ 6.000/dia útil · R$ 120.000 no mês</div>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;">
-          <div class="label">Realizado</div>
-          <div class="value" style="font-size:20px;">R$ 104.013</div>
-          <div class="sub">86,7% da meta</div>
-        </div>
-        <div class="kpi danger" style="padding:12px;">
-          <div class="label">Delta vs ritmo</div>
-          <div class="value" style="font-size:20px;">-R$ 9.913</div>
-          <div class="sub">vs meta 19d R$ 114.000</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Faltam</div>
-          <div class="value" style="font-size:20px;">R$ 15.987</div>
-          <div class="sub">em 1 dia útil</div>
-        </div>
-        <div class="kpi warn" style="padding:12px;">
-          <div class="label">Ritmo necessário</div>
-          <div class="value" style="font-size:20px;">R$ 15.987/dia</div>
-          <div class="sub">+318% sobre meta diária</div>
-        </div>
-      </div>
-      <div class="chart-wrapper" style="margin-top:16px;"><canvas id="chartAline"></canvas></div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:16px;">
-    <h3>Projeção Diária — Próximos 4 Dias Úteis</h3>
-    <div class="card-sub">Volume necessário para fechar metas — cenário de recuperação linear</div>
-    <table>
-      <thead><tr><th>Dia</th><th>Data</th><th>Suellen (Abertura)</th><th>Aline (Short+Final)</th><th>Total</th><th>Acumulado mês</th></tr></thead>
-      <tbody>
-        <tr><td>Terça</td><td>26/05</td><td>R$ 18.207</td><td>R$ 12.366</td><td><strong>R$ 30.573</strong></td><td>R$ 148.284</td></tr>
-
-
-
-        <tr style="background:#f3f4f6; font-weight:700;"><td colspan="2">Total a entregar</td><td>R$ 72.828</td><td>R$ 49.464</td><td>R$ 122.292</td><td>R$ 240.003</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section>
-  <h2>Operacional · Status Atual</h2>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">Vagas Trabalhadas</div><div class="value">143</div><div class="sub">44 fechadas · 23 canceladas · 85 ativas</div></div>
-    <div class="kpi danger"><div class="label">Vagas "Enviar Novos"</div><div class="value">55</div><div class="sub">65% das ativas paradas</div></div>
-    <div class="kpi"><div class="label">SIMs Realizados</div><div class="value">55 / 66</div><div class="sub">83% da meta · faltam 11</div></div>
-    <div class="kpi"><div class="label">% Aproveitamento</div><div class="value">30,8%</div><div class="sub">Histórico 12m: 46%</div></div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 2: SALES ====================== -->
-<div class="tab-content" id="tab-sales">
-
-<section>
-  <h2>Sales — Performance Detalhada</h2>
-  <div class="kpi-grid">
-    <div class="kpi primary"><div class="label">Vendas Realizadas</div><div class="value">R$ 151.176</div><div class="sub">Meta R$ 267.000 · 56,6%</div></div>
-    <div class="kpi info"><div class="label">Ticket Médio Transacional</div><div class="value">R$ 4.617</div><div class="sub">Novos R$ 4.233 · Rec R$ 4.834</div></div>
-    <div class="kpi"><div class="label">Vagas Abertas no Mês</div><div class="value">37</div><div class="sub">12 novos · 25 recorrentes</div></div>
-    <div class="kpi success"><div class="label">Cross-Sell SaaS</div><div class="value">3</div><div class="sub">R$ 33.984 (ticket R$ 9.852)</div></div>
-  </div>
-</section>
-
-<section>
-  <h2>Histórico 2026 · Meta x Realizado</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Evolução mensal — Geral</h3>
-      <div class="card-sub">Janeiro a Maio · Transacional + SaaS</div>
-      <div class="chart-wrapper"><canvas id="chartSalesHistorico"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Quebra por linha</h3>
-      <div class="card-sub">Transacional × SaaS — maio/26</div>
-      <div class="chart-wrapper"><canvas id="chartSalesLinha"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Performance Individual · Inside Sales</h2>
-  <div class="grid-2">
-    <div class="card" style="border-top:4px solid var(--primary);">
-      <h3>Vanuza</h3>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;"><div class="label">Meta Mensal</div><div class="value" style="font-size:18px;">R$ 198.737</div></div>
-        <div class="kpi primary" style="padding:12px;"><div class="label">Realizado</div><div class="value" style="font-size:18px;">R$ 117.288</div><div class="sub">59,95% ritmo</div></div>
-        <div class="kpi warn" style="padding:12px;"><div class="label">Falta</div><div class="value" style="font-size:18px;">R$ 81.449</div></div>
-        <div class="kpi info" style="padding:12px;"><div class="label">Tendência</div><div class="value" style="font-size:18px;">R$ 119.138</div><div class="sub">60% da meta</div></div>
-      </div>
-      <div style="margin-top:12px;"><div class="kpi-bar"><div style="width:44.96%; background:var(--primary)"></div></div></div>
-      <table style="margin-top:14px;">
-        <tr><td><strong>Meta Semestre</strong></td><td>R$ 1.000.000</td></tr>
-        <tr><td><strong>Executado Semestre</strong></td><td>R$ 421.197</td></tr>
-        <tr><td><strong>Conversão Lead/Venda</strong></td><td>15%</td></tr>
-        <tr><td><strong>Conversão Perdido</strong></td><td>54%</td></tr>
-      </table>
-    </div>
-    <div class="card" style="border-top:4px solid var(--info);">
-      <h3>Thalita</h3>
-      <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="kpi" style="padding:12px;"><div class="label">Meta Mensal</div><div class="value" style="font-size:18px;">R$ 74.000</div></div>
-        <div class="kpi info" style="padding:12px;"><div class="label">Realizado</div><div class="value" style="font-size:18px;">R$ 51.090</div><div class="sub">50,9%</div></div>
-        <div class="kpi warn" style="padding:12px;"><div class="label">Falta</div><div class="value" style="font-size:18px;">R$ 22.910</div></div>
-        <div class="kpi" style="padding:12px;"><div class="label">Tendência</div><div class="value" style="font-size:18px;">R$ 50.225</div><div class="sub">68% da meta</div></div>
-      </div>
-      <div style="margin-top:12px;"><div class="kpi-bar"><div style="width:50.9%; background:var(--info)"></div></div></div>
-      <table style="margin-top:14px;">
-        <tr><td><strong>Conversão Lead/Venda</strong></td><td>0%</td></tr>
-        <tr><td><strong>Conversão Perdido</strong></td><td>25%</td></tr>
-        <tr><td><strong>Captou em Roleta</strong></td><td>4 leads (3 negoc · 1 perdido)</td></tr>
-        <tr><td><strong>Vagas Abertas</strong></td><td>37 vagas abertas (Transacional)</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="grid-2" style="margin-top:16px;">
-    <div class="card">
-      <h3>Pipeline da Roleta — Maio/26</h3>
-      <div class="card-sub">Distribuição dos 17 leads recebidos</div>
-      <div class="chart-wrapper"><canvas id="chartPipeline"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Origens das Vendas (Transacional)</h3>
-      <div class="card-sub">Por canal de captação · maio/26</div>
-      <div class="chart-wrapper"><canvas id="chartOrigens"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Composição da Receita</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Por tipo de cliente</h3>
-      <div class="chart-wrapper"><canvas id="chartComposicao"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Métricas Comerciais — Maio/26</h3>
-      <table>
-        <tr><td>Transacional Recorrente</td><td><strong>R$ 128.840</strong></td><td>25 clientes</td></tr>
-        <tr><td>Transacional Novo</td><td><strong>R$ 48.700</strong></td><td>12 clientes</td></tr>
-        <tr><td>SaaS Cross-Sell</td><td><strong>R$ 33.984</strong></td><td>3 contratos</td></tr>
-        <tr><td>SaaS Novo</td><td>R$ 0</td><td>3 fechados (sem MRR ainda)</td></tr>
-        <tr style="background:#f9fafb"><td><strong>Total Realizado</strong></td><td><strong>R$ 212.674</strong></td><td>40 clientes únicos</td></tr>
-      </table>
-      <div class="alert warn" style="margin-top:16px;">
-        <strong>Atenção:</strong> Conversão de leads perdidos em 47% (média). Vanuza 54% · Thalita 25%. Indica desafios de qualificação ou follow-up.
-      </div>
-    </div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 3: PROJETOS ====================== -->
-<div class="tab-content" id="tab-projetos">
-
-<section>
-  <h2 class="projetos">Projetos — Operação de Vagas</h2>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">Vagas Trabalhadas</div><div class="value">143</div><div class="sub">+32% vs abr (108)</div></div>
-    <div class="kpi success"><div class="label">Fechadas (SIMs)</div><div class="value">55</div><div class="sub">Meta mês 66 · 83%</div></div>
-    <div class="kpi danger"><div class="label">Canceladas</div><div class="value">22</div><div class="sub">15% do volume</div></div>
-    <div class="kpi info"><div class="label">Ativas (em andamento)</div><div class="value">85</div><div class="sub">55 paradas em "Enviar Novos"</div></div>
-  </div>
-</section>
-
-<section>
-  <h2 class="projetos">Performance por Squad</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Volume por Squad</h3>
-      <div class="card-sub">Trabalhadas, fechadas e paradas em "Enviar Novos"</div>
-      <div class="chart-wrapper tall"><canvas id="chartSquads"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Status Daily Operacional</h3>
-      <div class="card-sub">Distribuição dos 100 ativos em maio</div>
-      <div class="chart-wrapper tall"><canvas id="chartDaily"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2 class="projetos">Performance Individual · Especialistas</h2>
-  <div class="card">
-    <table>
-      <thead><tr><th>Especialista</th><th>Squad</th><th>Trabalhadas</th><th>SIMs (fechadas)</th><th>Meta SIMs</th><th>Atingimento</th><th>Faturamento Mensal</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Thaiz</strong></td><td><span class="badge info">Estratégicos</span></td><td>8</td><td>18</td><td>8</td><td><span class="badge success">225%</span></td><td>R$ 6.900</td></tr>
-        <tr><td><strong>Isabelle</strong></td><td><span class="badge info">Core</span></td><td>24</td><td>21</td><td>24</td><td><span class="badge warn">88%</span></td><td>R$ 31.937</td></tr>
-        <tr><td><strong>Vittória</strong></td><td><span class="badge info">Brasil</span></td><td>17</td><td>8</td><td>17</td><td><span class="badge danger">47%</span></td><td>R$ 14.265</td></tr>
-        <tr><td><strong>Carla</strong></td><td><span class="badge info">Expansão</span></td><td>17</td><td>8</td><td>17</td><td><span class="badge danger">47%</span></td><td>R$ 29.169</td></tr>
-        <tr style="background:#f9fafb"><td colspan="3"><strong>Total time</strong></td><td><strong>55</strong></td><td><strong>66</strong></td><td><strong>83%</strong></td><td><strong>R$ 82.271</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="grid-2" style="margin-top:16px;">
-    <div class="card">
-      <h3>Time G.O. (Listas)</h3>
-      <div class="card-sub">Performance individual no mês · Meta total 102 SIMs</div>
-      <table>
-        <thead><tr><th>G.O.</th><th>Meta</th><th>Realizado</th><th>%</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Tifanny</strong></td><td>12</td><td>11</td><td><span class="badge success">92%</span></td></tr>
-          <tr><td><strong>Camila</strong></td><td>26</td><td>15</td><td><span class="badge warn">58%</span></td></tr>
-          <tr><td><strong>Adriele</strong></td><td>26</td><td>18</td><td><span class="badge warn">69%</span></td></tr>
-          <tr><td><strong>Érika</strong></td><td>26</td><td>14</td><td><span class="badge warn">54%</span></td></tr>
-          <tr><td><strong>Isabela</strong></td><td>12</td><td>5</td><td><span class="badge danger">42%</span></td></tr>
-          <tr style="background:#f3f4f6"><td><strong>TOTAL</strong></td><td><strong>102</strong></td><td><strong>63</strong></td><td><span class="badge warn"><strong>62%</strong></span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <h3>Funil de Candidatos · Maio</h3>
-      <div class="card-sub">Volume da operação G.O.</div>
-      <table>
-        <tr><td>Candidatos abordados</td><td><strong>596</strong></td></tr>
-        <tr><td>Candidatos agendados</td><td><strong>35</strong></td></tr>
-        <tr><td>Enviados (shortlist)</td><td><strong>64</strong></td></tr>
-        <tr><td>Aprovados pelo cliente</td><td><strong>8</strong></td></tr>
-        <tr><td>Taxa de aprovação</td><td><strong>12,5%</strong> (vs 24,8% em mar)</td></tr>
-      </table>
-      <div class="alert warn" style="margin-top:12px;">
-        <strong>Conversão piorou:</strong> taxa de aprovação caiu de 24,8% (mar) para 12,9% (mai). Revisar curadoria inicial e fit cultural.
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2 class="projetos">Honorários por Tipo de Cobrança</h2>
-  <div class="card">
-    <div class="card-sub">Histórico Mar a Mai · breakdown Abertura / Shortlist / Finalização</div>
-    <div class="chart-wrapper"><canvas id="chartHonorarios"></canvas></div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 4: COHORTS ====================== -->
-<div class="tab-content" id="tab-cohorts">
-
-<section>
-  <h2 class="cohort">Cohorts · Indicadores Financeiros e Projeções</h2>
-  <div class="alert info">
-    <strong>O que mostra esta aba:</strong> análise de saúde do funil, retenção de clientes, eficiência de custos, e projeção do mês com base no comportamento histórico.
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi success"><div class="label">Margem Bruta — Projetos</div><div class="value">84%</div><div class="sub">R$ 99k receita · R$ 19k custo time</div></div>
-    <div class="kpi info"><div class="label">CAC equivalente Sales</div><div class="value">R$ 1.483</div><div class="sub">R$ 17,8k custo / 12 fechados</div></div>
-    <div class="kpi warn"><div class="label">LTV/CAC estimado</div><div class="value">3,1x</div><div class="sub">Recorrentes · 60% retornam 12m</div></div>
-    <div class="kpi"><div class="label">Receita / FTE Projetos</div><div class="value">R$ 23.542</div><div class="sub">5 especialistas no time</div></div>
-  </div>
-</section>
-
-<section>
-  <h2 class="cohort">Comportamento Histórico · 13 Meses</h2>
-  <div class="card">
-    <h3>Receita Projetos × Sales · maio/25 a maio/26</h3>
-    <div class="card-sub">Evolução mensal e sazonalidade</div>
-    <div class="chart-wrapper tall"><canvas id="chartCohortReceita"></canvas></div>
-  </div>
-</section>
-
-<section>
-  <h2 class="cohort">Eficiência por Cohort</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>% Aproveitamento · Projetos</h3>
-      <div class="card-sub">SLA vagas fechadas vs trabalhadas</div>
-      <div class="chart-wrapper"><canvas id="chartAproveitamento"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Custo do Time vs Receita</h3>
-      <div class="card-sub">Investimento operacional 12m</div>
-      <div class="chart-wrapper"><canvas id="chartCusto"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2 class="cohort">Projeção · Fim de Maio e Junho/2026</h2>
-  <div class="card">
-    <table>
-      <thead><tr><th>Cenário</th><th>Receita Sales</th><th>Honorários Projetos</th><th>Total</th><th>vs Meta</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Otimista (recuperação total)</strong></td>
-          <td>R$ 267.000</td>
-          <td>R$ 159.582</td>
-          <td><strong>R$ 426.582</strong></td>
-          <td><span class="badge success">100% combinada</span></td>
-        </tr>
-        <tr>
-          <td><strong>Realista (mantém ritmo)</strong></td>
-          <td>R$ 201.568</td>
-          <td>R$ 148.000</td>
-          <td><strong>R$ 349.568</strong></td>
-          <td><span class="badge warn">85%</span></td>
-        </tr>
-        <tr>
-          <td><strong>Pessimista (gargalo persiste)</strong></td>
-          <td>R$ 165.000</td>
-          <td>R$ 110.000</td>
-          <td><strong>R$ 275.000</strong></td>
-          <td><span class="badge danger">64%</span></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="alert warn" style="margin-top:16px;">
-      <strong>Insight:</strong> nos últimos 12 meses, abril foi o mês de pico (R$ 207k Sales · R$ 187k Projetos). Maio histórico tem média de R$ 175k · 2025 fechou em R$ 169k. Estamos em risco de ficar abaixo do mesmo mês do ano passado.
-    </div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 5: VAGAS EM JOGO ====================== -->
-<div class="tab-content" id="tab-vagas">
-
-<section>
-  <h2 class="projetos">Vagas com Faturamento em Jogo</h2>
-  <div class="alert info">
-    <strong>O que está aqui:</strong> 46 vagas ativas em maio/26 com potencial de geração de receita por <em>Shortlist</em> ou <em>Finalização</em>. Filtre, ordene e identifique as prioridades.
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">Total de Vagas Ativas</div><div class="value">87</div><div class="sub">R$ 42.648 em potencial</div></div>
-    <div class="kpi danger"><div class="label">Em "Enviar Novos"</div><div class="value">58</div><div class="sub">Bloqueando R$ 20-35k</div></div>
-    <div class="kpi warn"><div class="label">&gt; 60 dias abertas</div><div class="value">15+</div><div class="sub">Alto risco de cancelamento</div></div>
-    <div class="kpi success"><div class="label">Próximas de Fechar</div><div class="value">12</div><div class="sub">Aguard. feedback + entrev.</div></div>
-  </div>
-
-  <div class="legend-pills">
-    <span><span class="badge danger">Crítica</span> &gt; 60 dias em "Enviar Novos"</span>
-    <span><span class="badge warn">Atenção</span> em risco</span>
-    <span><span class="badge info">Em andamento</span></span>
-    <span><span class="badge success">Próx. fechamento</span></span>
-  </div>
-
-  <div class="card">
-    <h3>Top Vagas — por idade e potencial de faturamento</h3>
-    <div class="card-sub">Ordenado por data de abertura. Coluna "Potencial" mostra valor que ainda pode ser cobrado (Shortlist + Finalização).</div>
-    <div id="grid-vagas"></div>
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 6: INSIGHTS ====================== -->
-<div class="tab-content" id="tab-insights">
-
-<section>
-  <h2 class="acao">Insights · O Que Precisa Acontecer Para Bater a Meta</h2>
-  <div class="alert danger">
-    <strong>Sumário:</strong> maio encerrou (último dia útil 30/05). Projetos encerrou maio com R$ 177.794 realizados (meta R$ 132k, +35%). SIMs: 55/66 = 83%. Sales: R$ 212.674 vs meta R$ 267k (80%). Thaiz foi destaque com 225% SIMs. Isabelle atingiu 88%. Vittória e Carla fecharam em 47%.
-  </div>
-
-  <div class="action-list">
-
-    <div class="action-item">
-      <div class="priority">Crítico</div>
-      <div class="body">
-        <div class="title">1. Destravar o gargalo "Enviar Novos" — 58 vagas paradas</div>
-        <div class="desc">67% das vagas ativas estão paradas aguardando candidatos. Bloqueia tanto Aline (precisa de shortlist) quanto Suellen (não abre novas se o estoque empata).</div>
-        <div class="metric"><strong>Ação imediata:</strong> sessão de priorização hoje com Camila + 4 especialistas. Definir top 30 vagas para inundar de candidatos nas próximas 48h. Acionar Adriele e Érika com lista pronta de empresas para abordagem ativa.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>R$ 30-50k</strong><br>destravados</div>
-    </div>
-
-    <div class="action-item">
-      <div class="priority">Crítico</div>
-      <div class="body">
-        <div class="title">2. Reativar os 8 leads "perdidos" da Roleta</div>
-        <div class="desc">Vanuza está perdendo 54% dos leads — número alto. Há 8 leads marcados como perdidos em maio que podem ser revisitados com proposta ajustada.</div>
-        <div class="metric"><strong>Ação imediata:</strong> Vanuza liga para cada um nesta semana. Oferecer crédito, ajuste de prazo ou produto. Meta: converter 3 dos 8 (R$ 12-15k).</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>R$ 12-15k</strong></div>
-    </div>
-
-    <div class="action-item">
-      <div class="priority">Crítico</div>
-      <div class="body">
-        <div class="title">3. Fechar os 7 em negociação até quinta (28/05)</div>
-        <div class="desc">Pipeline tem 7 leads quentes em negociação. Histórico de conversão 15% — neste momento, é necessário converter pelo menos 40% para fechar o mês.</div>
-        <div class="metric"><strong>Ação imediata:</strong> Vanuza + Thalita reservam 2h/dia para follow-up dedicado. Suellen liga em casos de não-resposta. Sem desconto além de 10%.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>R$ 25-35k</strong></div>
-    </div>
-
-    <div class="action-item warn">
-      <div class="priority">Atenção</div>
-      <div class="body">
-        <div class="title">4. Squad Estratégicos (Thaiz) superou meta — replicar modelo</div>
-        <div class="desc">Thaiz atingiu 225% da meta de SIMs (18 de 8) — fechamento do mês. Modelo de abordagem Estratégicos deve ser replicado para outros squads que estão abaixo do ritmo.</div>
-        <div class="metric"><strong>Ação:</strong> alocar Adriele exclusivamente para suportar Thaiz nas próximas 2 semanas. Listar 10 clientes investidor ainda não abordados e iniciar abordagem ativa.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>+R$ 20k</strong><br>até fim do mês</div>
-    </div>
-
-    <div class="action-item warn">
-      <div class="priority">Atenção</div>
-      <div class="body">
-        <div class="title">5. Pipeline G.O. avançou para 62% — manter ritmo Adriele e Tifanny</div>
-        <div class="desc">Time entregou 63 SIMs de meta 102. Adriele (69%) e Tifanny (92%) puxam para cima. Érika (54%) e Isabela (42%) ainda abaixo do ritmo e gerando gargalo em "Enviar Novos".</div>
-        <div class="metric"><strong>Ação:</strong> pareamento diário com Camila pelas próximas 2 semanas. Revisão de carga e prioridades. SLA de 12h para curadoria inicial.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>+30% throughput</strong></div>
-    </div>
-
-    <div class="action-item warn">
-      <div class="priority">Atenção</div>
-      <div class="body">
-        <div class="title">6. Vagas envelhecidas (&gt;60 dias) — decisão até semana</div>
-        <div class="desc">15+ vagas com 1º envio em Jan/Fev/26 ainda em "Enviar Novos". Risco de cancelamento e queima de relacionamento.</div>
-        <div class="metric"><strong>Ação:</strong> CS liga cada cliente. Ajustar perfil/salário, propor crédito ou migração para SaaS. Decisão final até 27/05.</div>
-      </div>
-      <div class="impact">Evitar<br><strong>R$ 40k+</strong><br>em cancelamentos</div>
-    </div>
-
-    <div class="action-item info">
-      <div class="priority">Oportunidade</div>
-      <div class="body">
-        <div class="title">7. Cross-Sell SaaS para base recorrente</div>
-        <div class="desc">SaaS já bateu meta de maio (100,5%). Há 100+ clientes Transacionais ativos sem SaaS — terreno fértil para R$ 369-618 MRR/cliente.</div>
-        <div class="metric"><strong>Ação:</strong> Vanuza/Thalita montam lista de top 20 clientes ativos sem SaaS. Campanha rápida na semana de 26-29/05.</div>
-      </div>
-      <div class="impact">Impacto:<br><strong>+R$ 7-15k MRR</strong></div>
-    </div>
-
-    <div class="action-item success">
-      <div class="priority">Insight</div>
-      <div class="body">
-        <div class="title">8. Maio histórico era o mês fraco — antecipar 2027</div>
-        <div class="desc">Olhando 12 meses: maio/25 fechou em R$ 169k (Sales) e foi mês mediano. 2026 precisa quebrar o padrão. Outubro foi o pico de 2025 (R$ 234k).</div>
-        <div class="metric"><strong>Ação estratégica:</strong> redesenhar roteiro comercial para que maio seja prospecção forte com fechamento concentrado em junho. Lançar projeto de indicações antes de junho.</div>
-      </div>
-      <div class="impact">Impacto:<br>tendência<br>estrutural</div>
-    </div>
-
-  </div>
-</section>
-
-</div>
-
-<!-- ====================== TAB 7: HISTÓRICO ====================== -->
-<div class="tab-content" id="tab-historico">
-
-<section>
-  <h2>Histórico de Operações · 13 Meses</h2>
-  <div class="card-sub" style="margin-bottom:16px;">Dados consolidados da planilha <em>[Operações] - Painel Estratégico 2026</em> · maio/25 a maio/26</div>
-
-  <div class="grid-3">
-    <div class="card">
-      <h3>Sales · Volume</h3>
-      <div class="chart-wrapper"><canvas id="chartHistSalesVol"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Projetos · SIMs</h3>
-      <div class="chart-wrapper"><canvas id="chartHistSims"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>G.O. · Abordagem</h3>
-      <div class="chart-wrapper"><canvas id="chartHistGo"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Tabela Completa · KPIs Mensais</h2>
-  <div class="card">
-    <div id="grid-historico"></div>
-  </div>
-</section>
-
-<section>
-  <h2>Dinâmica do Time</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Tamanho do time · Projetos</h3>
-      <div class="card-sub">Evolução do headcount nos últimos 12 meses</div>
-      <div class="chart-wrapper"><canvas id="chartHistTime"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Custo do time × Receita gerada</h3>
-      <div class="card-sub">Investimento operacional vs retorno</div>
-      <div class="chart-wrapper"><canvas id="chartHistCusto"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Insights do Histórico</h2>
-  <div class="action-list">
-    <div class="action-item info">
-      <div class="priority">Histórico</div>
-      <div class="body">
-        <div class="title">Pico de receita: Julho/25 (R$ 260k Sales · R$ 205k Projetos)</div>
-        <div class="desc">Julho foi disparadamente o melhor mês. Combinação de 71 vagas abertas + 73 SIMs entregues. Análise sazonal vale ouro para 2026.</div>
-      </div>
-      <div class="impact">Replicar<br>padrão em jun-jul</div>
-    </div>
-    <div class="action-item warn">
-      <div class="priority">Risco</div>
-      <div class="body">
-        <div class="title">Time reduziu de 8 → 4 → 5 pessoas em Projetos</div>
-        <div class="desc">Headcount caiu 50% entre setembro/25 e jan/26. Recente recomposição para 5. Custo do time caiu de R$ 39k para R$ 19k/mês, mas eficiência por pessoa também caiu.</div>
-      </div>
-      <div class="impact">Receita/pessoa<br>caiu 32%</div>
-    </div>
-    <div class="action-item warn">
-      <div class="priority">Alerta</div>
-      <div class="body">
-        <div class="title">% de aproveitamento despencou</div>
-        <div class="desc">De 69% (maio/25) para 31,9% (maio/26). Volume de vagas trabalhadas cresceu (163 em maio vs 115 em maio/25), mas conversão para fechamento caiu. Possível overbooking do time.</div>
-      </div>
-      <div class="impact">Sinal de<br>queda de qualidade</div>
-    </div>
-  </div>
-</section>
-
-</div>
-
-<footer>
-  Painel gerado a partir de 4 planilhas conectadas via Google Drive.<br>
-  Atualize manualmente pelo botão de Reload do Cowork (recolhe os dados mais recentes das planilhas).
-</footer>
-
-</div>
-
-<script>
-// ===== DATA EMBARCADA =====
-const DATA = {
-  ultimaAtualizacao: '30/05/2026',
-  diasUteisMes: 20,
-  diasUteisDecorridos: 20,
-  diasUteisRestantes: 0,
-  // Histórico do Painel Estratégico
-  historico: {
-    meses: ['mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25','jan/26','fev/26','mar/26','abr/26','mai/26'],
-    projetos: {
-      sims: [80,49,73,56,61,44,43,49,36,39,59,44,52],
-      receita: [201199,149407,205719,143152,184941,165053,134550,129907,159999,114591,168136,145320,168128],
-      pessoas: [8,8,8,8,6,6,6,6,4,4,4,5,5],
-      custo: [39611,39611,39611,39611,28340,28340,28340,28340,28340,19000,19000,19000,19000],
-      sla: [18,22,20,24,19,19,16,9,19,13,29,36,28],
-      vagasTrab: [115,113,134,104,102,95,93,71,78,108,179,160,163],
-      vagasCanc: [21,9,10,18,11,14,15,10,15,15,27,20,23],
-      aproveit: [69.57,43.36,54.48,53.85,59.80,46.32,46.24,69.01,46.15,36.11,32.96,27.50,31.90]
-    },
-    go: {
-      abordados: [null,null,null,null,2548,1545,1509,2958,2558,3904,4485,2474,2474],
-      enviados: [81,57,46,51,67,57,41,37,26,66,129,85,27],
-      aprovados: [null,null,null,null,null,null,null,null,null,11,32,11,11],
-      custo: [5400,5400,5400,5400,5400,5400,5400,5400,5400,9900,9900,9900,9900]
-    },
-    sales: {
-      novos: [10,14,25,14,16,11,8,7,20,17,17,17,15],
-      recorrentes: [31,37,40,30,32,27,26,23,36,46,48,11,25],
-      unicos: [41,51,65,44,48,38,34,30,56,63,65,28,40],
-      vagasAbertas: [54,55,71,42,64,65,54,30,62,48,79,57,37],
-      valorContrato: [169602,195037,260569,165372,228936,234532,156732,133226,151030,194444,205157,207224,212674],
-      custoTime: [28720,22058,9218,17242,24137,31241,24192,21192,22294,17602,17798,17798,17798]
-    }
-  },
-  // Lista de vagas em jogo
-  vagas: [
-    ['16129','GR ASSESSORIA CONTABIL','Thaiz','Estratégicos','04/12/2025','167','Enviar Novos','R$ 0','Crítica'],
-    ['16135','Naves Coelho Contábil','Adriele','Brasil','12/12/2025','159','Enviar Novos','R$ 0','Crítica'],
-    ['16320','RUFINO CONSULTORIA','Vittória','Brasil','28/01/2026','112','Enviar Novos','R$ 1.085','Crítica'],
-    ['16193','Masterqualy','Vittória','Brasil','20/01/2026','120','Enviar Novos','R$ 906','Crítica'],
-    ['16308','Bagnato Associados','Vittória','Brasil','27/01/2026','113','Enviar Novos','R$ 2.121','Crítica'],
-    ['16348','Orgatec','Isabelle','Core','04/02/2026','106','Enviar Novos','R$ 4.830','Crítica'],
-    ['16401','UNIDAS DO BRASIL','Isabelle','Core','10/02/2026','100','Agendar Entrevista','R$ 1.085','Atenção'],
-    ['16476','D+ Contabilidade','Carla','Expansão','24/02/2026','86','Enviar Novos','R$ 907','Atenção'],
-    ['16480','Piacente','Isabelle','Core','24/02/2026','86','Enviar Novos','R$ 3.387','Atenção'],
-    ['16384','Anima Legalizações','Isabelle','Core','11/02/2026','99','Enviar Novos','R$ 447','Atenção'],
-    ['16385','Anima Legalizações','Isabelle','Core','18/02/2026','92','Enviar Novos','R$ 735','Atenção'],
-    ['16487','Fiscotec','Isabelle','Core','26/02/2026','84','Enviar Novos','R$ 1.682','Atenção'],
-    ['16328','Miranda e Costa','Thaiz','Estratégicos','04/02/2026','106','Agendar Entrevista','R$ 1.925','Atenção'],
-    ['16333','RR Oliveira (RRO)','Isabelle','Core','18/02/2026','92','Enviar Novos','R$ 980','Atenção'],
-    ['16485','Medeiros Org','Carla','Expansão','26/02/2026','84','Enviar Novos','R$ 2.940','Atenção'],
-    ['16502','Diamante Contabilidade','Isabelle','Core','25/02/2026','85','Enviar Novos','R$ 2.100','Atenção'],
-    ['16513','Constanzo Contabilidade','Isabelle','Core','27/02/2026','83','Enviar Novos','R$ 875','Atenção'],
-    ['16517','Alliance Contabilidade','Vittória','Brasil','27/02/2026','83','Enviar Novos','R$ 1.102','Atenção'],
-    ['16519','GLM Escritório','Carla','Expansão','27/02/2026','83','Enviar Novos','R$ 2.362','Atenção'],
-    ['16542','Contabilidade Lima','Carla','Expansão','04/03/2026','78','Enviar Novos','R$ 1.208','Em andamento'],
-    ['16553','JT Prestação Serv','Isabelle','Core','05/03/2026','77','Enviar Novos','R$ 1.487','Em andamento'],
-    ['16557','Wilker Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 735','Em andamento'],
-    ['16560','Kativa Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 955','Em andamento'],
-    ['16562','Kativa Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 928','Em andamento'],
-    ['16563','Kativa Contabilidade','Isabelle','Core','06/03/2026','76','Enviar Novos','R$ 2.773','Em andamento'],
-    ['16564','ITATIAIA ATACADISTA','Vittória','Brasil','09/03/2026','73','Enviar Novos','R$ 1.487','Em andamento'],
-    ['16577','ANKOR','Vittória','Brasil','10/03/2026','72','Enviar Novos','R$ 1.418','Em andamento'],
-    ['16576','Helmar Contabil','Isabelle','Core','10/03/2026','72','Enviar Novos','R$ 875','Em andamento'],
-    ['16575','Helmar Contabil','Isabelle','Core','10/03/2026','72','Aguard. Feedback','R$ 875','Próx. fechamento'],
-    ['16580','MISTER CONT','Isabelle','Core','10/03/2026','72','Enviar Novos','R$ 1.121','Em andamento'],
-    ['16626','DUOEXO CONTABILIDADE','Vittória','Brasil','17/03/2026','65','Aguard. Feedback','R$ 5.075','Próx. fechamento'],
-    ['16645','PGS','Isabelle','Core','19/03/2026','63','Aguard. Feedback','R$ 6.300','Próx. fechamento'],
-    ['16680','Arca Accounttech','Thaiz','Estratégicos','27/03/2026','55','Entrev. Agendada','R$ 4.200','Próx. fechamento'],
-    ['16689','Pedra Branca Contabilidade','Vittória','Brasil','31/03/2026','51','Entrev. Agendada','R$ 5.250','Próx. fechamento'],
-    ['16704','Nutriport Comercial','Isabelle','Core','07/04/2026','44','Enviar Novos','R$ 5.460','Em andamento'],
-    ['16714','TAG / INFINITI','Isabelle','Core','08/04/2026','43','Enviar Novos','R$ 4.725','Em andamento'],
-    ['16715','TAG / INFINITI','Isabelle','Core','08/04/2026','43','Enviar Novos','R$ 3.203','Em andamento'],
-    ['16717','FOCVS INTELIGENCIA','Vittória','Brasil','09/04/2026','42','Enviar Novos','R$ 2.452','Em andamento'],
-    ['16718','CODEP ASSESSORIA','Isabelle','Core','09/04/2026','42','Aguard. Feedback','R$ 4.655','Próx. fechamento'],
-    ['16760','ESCRITORIO CONCEITO','Isabelle','Core','17/04/2026','34','Enviar Novos','R$ 3.850','Em andamento'],
-    ['16768','GR DIGITAL','Carla','Expansão','17/04/2026','34','Enviar Novos','R$ 3.238','Em andamento'],
-    ['16776','TAXS CONTABILIDADE','Vittória','Brasil','20/04/2026','31','Aguard. Feedback','R$ 2.800','Próx. fechamento'],
-    ['16777','TAXS CONTABILIDADE','Vittória','Brasil','20/04/2026','31','Enviar Novos','R$ 2.800','Em andamento'],
-    ['16794','Neo Contabilidade','Isabelle','Core','23/04/2026','28','Enviar Novos','R$ 3.150','Em andamento'],
-    ['16832','Lumi Contabilidade','Carla','Expansão','04/05/2026','17','Enviar Novos','R$ 3.010','Em andamento'],
-    ['16837','Sauvet Campinas','Carla','Expansão','05/05/2026','16','Enviar Novos','R$ 3.150','Em andamento'],
-    ['16838','Sauvet Campinas','Carla','Expansão','05/05/2026','16','Enviar Novos','R$ 3.850','Em andamento'],
-    ['16858','Fiscotec','Thaiz','Estratégicos','08/05/2026','13','Enviar Novos','R$ 1.301','Em andamento'],
-    ['16865','STABILIS','Carla','Expansão','12/05/2026','9','Enviar Novos','R$ 3.430','Em andamento'],
-    ['16869','MMS CONTABILIDADE','Carla','Expansão','12/05/2026','9','Enviar Novos','R$ 2.030','Em andamento'],
-    ['16881','Infiniti Tecnologia','Thaiz','Estratégicos','14/05/2026','7','Enviar Novos','R$ 3.150','Em andamento'],
-    ['16890','Trend Marketing','Vittória','Brasil','15/05/2026','6','Enviar Novos','R$ 2.240','Em andamento'],
-    ['16895','JJR Contabil','Thaiz','Estratégicos','19/05/2026','2','Enviar Novos','R$ 5.775','Em andamento'],
-    ['16897','Attenza','Carla','Expansão','19/05/2026','2','Enviar Novos','R$ 3.325','Em andamento'],
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Dashboard Connectabil Comercial Projetos",
+  "schemaVersion": 1,
+  "description": "Dashboard operacional Connectabil — Comercial + Projetos 2026. Atualizado automaticamente 2x/dia via tarefa agendada.",
+  "mcpTools": [
+    "mcp__4abfd296-b26a-485f-8185-36cdec52adb6__read_file_content"
+  ],
+  "mcpServerNames": [
+    "Google Drive"
   ]
+}
+</script>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Connectabil — Comercial &amp; Projetos</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<style>
+:root{color-scheme:light;--bg:#f7f8fb;--card:#ffffff;--border:#e5e7ee;--text:#1a1f36;--muted:#6b7280;--primary:#2563eb;--primary-bg:#eff6ff;--success:#10b981;--warn:#f59e0b;--danger:#ef4444;--info:#6366f1;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
+.container{max-width:1400px;margin:0 auto;padding:20px;}
+header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:2px solid var(--border);flex-wrap:wrap;gap:12px;}
+header h1{margin:0 0 4px 0;font-size:22px;font-weight:700;}
+header .subtitle{color:var(--muted);font-size:13px;}
+header .meta{text-align:right;font-size:12px;color:var(--muted);}
+header .meta .date{font-size:14px;color:var(--text);font-weight:600;}
+.refresh-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--primary-bg);color:var(--primary);border-radius:12px;font-size:12px;font-weight:600;margin-top:4px;}
+.refresh-badge.live::before{content:'';width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+nav.tabs{display:flex;gap:4px;margin:16px 0 24px 0;border-bottom:2px solid var(--border);overflow-x:auto;padding-bottom:0;}
+nav.tabs button{background:none;border:none;padding:12px 20px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:8px 8px 0 0;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all 0.15s;}
+nav.tabs button:hover{color:var(--text);background:var(--card);}
+nav.tabs button.active{color:var(--primary);border-bottom-color:var(--primary);background:var(--card);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn 0.3s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+section{margin-bottom:32px;}
+h2{font-size:18px;margin:0 0 16px 0;font-weight:700;display:flex;align-items:center;gap:8px;}
+h2::before{content:'';display:inline-block;width:4px;height:20px;background:var(--primary);border-radius:2px;}
+h2.projetos::before{background:var(--info);}
+h2.acao::before{background:var(--danger);}
+h2.cohort::before{background:var(--success);}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:16px;}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.kpi .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px;font-weight:600;}
+.kpi .value{font-size:24px;font-weight:700;margin-bottom:4px;}
+.kpi .sub{font-size:12px;color:var(--muted);}
+.kpi.success .value{color:var(--success);}
+.kpi.warn .value{color:var(--warn);}
+.kpi.danger .value{color:var(--danger);}
+.kpi.primary .value{color:var(--primary);}
+.kpi.info .value{color:var(--info);}
+.kpi-bar{height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden;}
+.kpi-bar>div{height:100%;border-radius:2px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+@media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.card h3{margin:0 0 16px 0;font-size:15px;font-weight:700;}
+.card-sub{font-size:12px;color:var(--muted);margin-top:-10px;margin-bottom:16px;}
+.chart-wrapper{position:relative;height:280px;}
+.chart-wrapper.tall{height:360px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:11px;letter-spacing:0.3px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg);}
+td{padding:10px 12px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;}
+.badge.success{background:#d1fae5;color:#065f46;}
+.badge.warn{background:#fef3c7;color:#92400e;}
+.badge.danger{background:#fee2e2;color:#991b1b;}
+.badge.info{background:#e0e7ff;color:#3730a3;}
+.badge.neutral{background:#f3f4f6;color:#374151;}
+.action-list{display:grid;gap:12px;}
+.action-item{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--danger);border-radius:8px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;}
+.action-item.warn{border-left-color:var(--warn);}
+.action-item.info{border-left-color:var(--info);}
+.action-item.success{border-left-color:var(--success);}
+.action-item .priority{font-size:11px;font-weight:700;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:#fee2e2;color:#991b1b;white-space:nowrap;}
+.action-item.warn .priority{background:#fef3c7;color:#92400e;}
+.action-item.info .priority{background:#e0e7ff;color:#3730a3;}
+.action-item.success .priority{background:#d1fae5;color:#065f46;}
+.action-item .body{display:grid;gap:4px;}
+.action-item .body .title{font-weight:700;font-size:14px;}
+.action-item .body .desc{color:var(--muted);font-size:13px;}
+.action-item .body .metric{font-size:12px;color:var(--text);margin-top:4px;}
+.action-item .impact{font-size:12px;color:var(--muted);text-align:right;max-width:200px;}
+footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);text-align:center;}
+.alert{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;}
+.alert.warn{background:#fef3c7;color:#92400e;border-left:4px solid var(--warn);}
+.alert.danger{background:#fee2e2;color:#991b1b;border-left:4px solid var(--danger);}
+.alert.info{background:#e0e7ff;color:#3730a3;border-left:4px solid var(--info);}
+.alert.success{background:#d1fae5;color:#065f46;border-left:4px solid var(--success);}
+.gridjs-wrapper{box-shadow:none!important;border:1px solid var(--border)!important;}
+.gridjs-table{font-size:12px!important;}
+.gridjs-th{background:var(--bg)!important;}
+.legend-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.legend-pills span{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--bg);color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div>
+    <h1>Painel Operacional Connectabil</h1>
+    <div class="subtitle">Comercial · Projetos · Cohorts · Operações</div>
+    <div class="refresh-badge live" id="refresh-status">Atualizado em 06/06/2026 · Início de mês</div>
+  </div>
+  <div class="meta">
+    <div class="date">Junho / 2026</div>
+    <div>Mês ativo · 4 de 21 dias úteis</div>
+    <div>Fontes: 4 planilhas conectadas</div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="main">Dashboard</button>
+  <button class="tab" data-tab="sales">Sales</button>
+  <button class="tab" data-tab="projetos">Projetos</button>
+  <button class="tab" data-tab="cohorts">Cohorts</button>
+  <button class="tab" data-tab="vagas">Vagas em Jogo</button>
+  <button class="tab" data-tab="insights">Insights</button>
+  <button class="tab" data-tab="historico">Histórico</button>
+</nav>
+
+<!-- TAB 1: DASHBOARD -->
+<div class="tab-content active" id="tab-main">
+<section>
+  <h2>Visão do Mês — Junho/2026 <span class="badge warn" style="font-size:11px;margin-left:8px;">4 de 21 dias úteis</span></h2>
+  <div class="alert info"><strong>Início de mês:</strong> dados parciais — 4 dias úteis decorridos de 21. Corpus Christi (05/06 feriado). Projeção baseada no ritmo atual.</div>
+  <div class="kpi-grid">
+    <div class="kpi warn">
+      <div class="label">Vendas Realizadas (Sales)</div>
+      <div class="value">R$ 17.514</div>
+      <div class="sub">Meta R$ 267.000 · 6,6% · Tendência R$ 91.951</div>
+      <div class="kpi-bar"><div style="width:6.6%; background:var(--warn)"></div></div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">Honorários Projetos</div>
+      <div class="value">R$ 21.075</div>
+      <div class="sub">Estimado · Abertura R$7.475 · Short+Final R$13.600</div>
+      <div class="kpi-bar"><div style="width:17.5%; background:var(--info)"></div></div>
+    </div>
+    <div class="kpi">
+      <div class="label">SIMs Realizados</div>
+      <div class="value">8 / 66</div>
+      <div class="sub">12,1% da meta · ritmo 3,4/dia necessário</div>
+      <div class="kpi-bar"><div style="width:12.1%; background:var(--primary)"></div></div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">Tendência Sales</div>
+      <div class="value">R$ 91.951</div>
+      <div class="sub">Gap projetado: -R$ 175.049 vs meta R$267k</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Metas por Líder de Operação</h2>
+  <div class="alert info">
+    <strong>Status do mês:</strong> 4 dias úteis decorridos · 17 restantes. Junho tem 21 dias úteis (Corpus Christi 05/06 foi feriado).
+  </div>
+  <div class="grid-2">
+    <div class="card" style="border-top:4px solid var(--primary);">
+      <h3>Suellen — Sales · Abertura</h3>
+      <div class="card-sub">Meta R$ 6.000/dia útil · R$ 120.000 no mês</div>
+      <div class="kpi-grid" style="grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="kpi" style="padding:12px;"><div class="label">Realizado</div><div class="value" style="font-size:20px;">R$ 7.475</div><div class="sub">6.2% da meta</div></div>
+        <div class="kpi danger" style="padding:12px;"><div class="label">Delta vs ritmo</div><div class="value" style="font-size:20px;">-R$ 16.525</div><div class="sub">vs meta 4d R$ 24.000</div></div>
+        <div class="kpi warn" style="padding:12px;"><div class="label">Faltam</div><div class="value" style="font-size:20px;">R$ 112.525</div><div class="sub">em 17 dias úteis</div></div>
+        <div class="kpi warn" style="padding:12px;"><div class="label">Ritmo necessário</div><div class="value" style="font-size:20px;">R$ 6,619/dia</div><div class="sub">+10% acima da meta diária</div></div>
+      </div>
+      <div class="chart-wrapper" style="margin-top:16px;"><canvas id="chartSuellen"></canvas></div>
+    </div>
+    <div class="card" style="border-top:4px solid var(--info);">
+      <h3>Aline — Projetos · Shortlist + Finalização</h3>
+      <div class="card-sub">Meta R$ 6.000/dia útil · R$ 120.000 no mês</div>
+      <div class="kpi-grid" style="grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="kpi" style="padding:12px;"><div class="label">Realizado</div><div class="value" style="font-size:20px;">R$ 13.600</div><div class="sub">11.3% da meta</div></div>
+        <div class="kpi warn" style="padding:12px;"><div class="label">Delta vs ritmo</div><div class="value" style="font-size:20px;">-R$ 10.400</div><div class="sub">vs meta 4d R$ 24.000</div></div>
+        <div class="kpi warn" style="padding:12px;"><div class="label">Faltam</div><div class="value" style="font-size:20px;">R$ 106.400</div><div class="sub">em 17 dias úteis</div></div>
+        <div class="kpi warn" style="padding:12px;"><div class="label">Ritmo necessário</div><div class="value" style="font-size:20px;">R$ 6,259/dia</div><div class="sub">+4% acima da meta diária</div></div>
+      </div>
+      <div class="chart-wrapper" style="margin-top:16px;"><canvas id="chartAline"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>Projeção Diária — Próxima Semana (08–12/06)</h3>
+    <div class="card-sub">Ritmo necessário para atingir metas — distribuição linear</div>
+    <table>
+      <thead><tr><th>Dia</th><th>Data</th><th>Suellen (Abertura)</th><th>Aline (Short+Final)</th><th>Total</th><th>Acumulado mês</th></tr></thead>
+      <tbody>
+        <tr><td>Segunda</td><td>08/06</td><td>R$ 6.619</td><td>R$ 6.259</td><td><strong>R$ 12.878</strong></td><td>R$ 46.163</td></tr>
+        <tr><td>Terça</td><td>09/06</td><td>R$ 6.619</td><td>R$ 6.259</td><td><strong>R$ 12.878</strong></td><td>R$ 59.041</td></tr>
+        <tr><td>Quarta</td><td>10/06</td><td>R$ 6.619</td><td>R$ 6.259</td><td><strong>R$ 12.878</strong></td><td>R$ 71.919</td></tr>
+        <tr><td>Quinta</td><td>11/06</td><td>R$ 6.619</td><td>R$ 6.259</td><td><strong>R$ 12.878</strong></td><td>R$ 84.797</td></tr>
+        <tr><td>Sexta</td><td>12/06</td><td>R$ 6.619</td><td>R$ 6.259</td><td><strong>R$ 12.878</strong></td><td>R$ 97.675</td></tr>
+        <tr style="background:#f3f4f6;font-weight:700;"><td colspan="2">Total necessário para atingir meta</td><td>R$ 112.525</td><td>R$ 106.400</td><td>R$ 218.925</td><td>R$ 240.000</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Operacional · Status Atual</h2>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">Vagas em Jogo</div><div class="value">59</div><div class="sub">17 críticas · 8 próximas de fechar</div></div>
+    <div class="kpi danger"><div class="label">Vagas Críticas (&gt;90 dias)</div><div class="value">17</div><div class="sub">Abertas desde dez/jan — risco alto de cancelamento</div></div>
+    <div class="kpi"><div class="label">SIMs Realizados</div><div class="value">8 / 66</div><div class="sub">Isa:1 · Vittória:3 · Carla:4 · Thaiz:0</div></div>
+    <div class="kpi info"><div class="label">Próximas de Fechar</div><div class="value">8</div><div class="sub">Em feedback ou entrevista agendada</div></div>
+  </div>
+</section>
+</div>
+
+<!-- TAB 2: SALES -->
+<div class="tab-content" id="tab-sales">
+<section>
+  <h2>Sales — Performance Junho/2026</h2>
+  <div class="kpi-grid">
+    <div class="kpi warn"><div class="label">Vendas Realizadas</div><div class="value">R$ 17.514</div><div class="sub">Meta R$ 267.000 · 6,6% (4 dias úteis)</div></div>
+    <div class="kpi"><div class="label">Tendência</div><div class="value">R$ 91.951</div><div class="sub">Projeção linear ao ritmo atual</div></div>
+    <div class="kpi"><div class="label">Vagas Abertas no Mês</div><div class="value">5</div><div class="sub">Dados parciais — 4 dias úteis</div></div>
+    <div class="kpi info"><div class="label">Dias Úteis Restantes</div><div class="value">17</div><div class="sub">de 21 totais · 4 decorridos</div></div>
+  </div>
+</section>
+<section>
+  <h2>Histórico 2026 · Meta x Realizado</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Evolução mensal — Geral</h3>
+      <div class="card-sub">Janeiro a Junho · Transacional + SaaS</div>
+      <div class="chart-wrapper"><canvas id="chartSalesHistorico"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Performance Individual</h3>
+      <div class="card-sub">Vanuza e Thalita — Junho/26</div>
+      <table>
+        <thead><tr><th>Vendedor</th><th>Meta</th><th>Realizado</th><th>%</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Vanuza</strong></td><td>R$ 198.737</td><td>R$ 17.514</td><td><span class="badge warn">8,8%</span></td></tr>
+          <tr><td><strong>Thalita</strong></td><td>R$ 74.000</td><td>R$ 0</td><td><span class="badge danger">0%</span></td></tr>
+          <tr style="background:#f9fafb"><td><strong>Total</strong></td><td><strong>R$ 272.737</strong></td><td><strong>R$ 17.514</strong></td><td><span class="badge warn"><strong>6,4%</strong></span></td></tr>
+        </tbody>
+      </table>
+      <div class="alert warn" style="margin-top:12px;"><strong>Atenção:</strong> tendência de R$91k está 66% abaixo da meta. Primeiros 4 dias são base baixa — acompanhar ritmo segunda semana.</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- TAB 3: PROJETOS -->
+<div class="tab-content" id="tab-projetos">
+<section>
+  <h2 class="projetos">Projetos — Operação de Vagas Junho/2026</h2>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">SIMs Realizados</div><div class="value">8</div><div class="sub">Meta 66 · 12,1% · 4 dias úteis</div></div>
+    <div class="kpi warn"><div class="label">Ritmo Necessário</div><div class="value">3,4/dia</div><div class="sub">Para atingir 66 SIMs em 17 dias restantes</div></div>
+    <div class="kpi info"><div class="label">Vagas Abertas (pipeline)</div><div class="value">59</div><div class="sub">R$ 142.950 em potencial total</div></div>
+    <div class="kpi danger"><div class="label">Críticas (&gt;90 dias)</div><div class="value">17</div><div class="sub">Abertas desde dez/jan — decisão urgente</div></div>
+  </div>
+</section>
+<section>
+  <h2 class="projetos">Performance Individual · Especialistas — Junho/2026</h2>
+  <div class="card">
+    <div class="alert info">Dados parciais — apenas 4 dias úteis decorridos. Junho tem 21 dias úteis totais.</div>
+    <table>
+      <thead><tr><th>Especialista</th><th>Squad</th><th>SIMs</th><th>Meta SIMs</th><th>Atingimento</th><th>Ritmo necessário</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Isabelle</strong></td><td><span class="badge info">Core</span></td><td>1</td><td>24</td><td><span class="badge danger">4%</span></td><td>1,4/dia</td></tr>
+        <tr><td><strong>Vittória</strong></td><td><span class="badge info">Brasil</span></td><td>3</td><td>17</td><td><span class="badge warn">18%</span></td><td>0,8/dia</td></tr>
+        <tr><td><strong>Carla</strong></td><td><span class="badge info">Expansão</span></td><td>4</td><td>17</td><td><span class="badge warn">24%</span></td><td>0,8/dia</td></tr>
+        <tr><td><strong>Thaiz</strong></td><td><span class="badge info">Estratégicos</span></td><td>0</td><td>8</td><td><span class="badge danger">0%</span></td><td>0,5/dia</td></tr>
+        <tr style="background:#f9fafb"><td colspan="2"><strong>Total time</strong></td><td><strong>8</strong></td><td><strong>66</strong></td><td><strong>12,1%</strong></td><td><strong>3,4/dia</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <h3>Volume por Squad — Junho (parcial)</h3>
+    <div class="chart-wrapper tall"><canvas id="chartSquads"></canvas></div>
+  </div>
+</section>
+<section>
+  <h2 class="projetos">Honorários por Tipo — Comparativo Mai/Jun</h2>
+  <div class="card">
+    <div class="card-sub">Março · Abril · Maio · Junho (parcial)</div>
+    <div class="chart-wrapper"><canvas id="chartHonorarios"></canvas></div>
+  </div>
+</section>
+</div>
+
+<!-- TAB 4: COHORTS -->
+<div class="tab-content" id="tab-cohorts">
+<section>
+  <h2 class="cohort">Cohorts · Indicadores Financeiros</h2>
+  <div class="alert info"><strong>Dados de junho parciais</strong> — análise de cohorts baseada nos 13 meses anteriores (mai/25 a mai/26).</div>
+  <div class="kpi-grid">
+    <div class="kpi success"><div class="label">Margem Bruta — Projetos</div><div class="value">84%</div><div class="sub">Base mai/26 · R$ 19k custo time</div></div>
+    <div class="kpi info"><div class="label">CAC equivalente Sales</div><div class="value">R$ 1.483</div><div class="sub">R$ 17,8k custo / 12 fechados</div></div>
+    <div class="kpi warn"><div class="label">LTV/CAC estimado</div><div class="value">3,1x</div><div class="sub">Recorrentes · 60% retornam 12m</div></div>
+    <div class="kpi"><div class="label">Receita / FTE Projetos</div><div class="value">R$ 29.064</div><div class="sub">5 especialistas · base mai/26</div></div>
+  </div>
+</section>
+<section>
+  <h2 class="cohort">Comportamento Histórico · 14 Meses</h2>
+  <div class="card">
+    <h3>Receita Projetos × Sales · mai/25 a jun/26</h3>
+    <div class="card-sub">Evolução mensal e sazonalidade · jun/26 = dados parciais</div>
+    <div class="chart-wrapper tall"><canvas id="chartCohortReceita"></canvas></div>
+  </div>
+</section>
+<section>
+  <h2 class="cohort">Eficiência por Cohort</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>% Aproveitamento · Projetos</h3>
+      <div class="chart-wrapper"><canvas id="chartAproveitamento"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Custo do Time vs Receita</h3>
+      <div class="chart-wrapper"><canvas id="chartCusto"></canvas></div>
+    </div>
+  </div>
+</section>
+<section>
+  <h2 class="cohort">Projeção · Junho/2026</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>Cenário</th><th>Receita Sales</th><th>Honorários Projetos</th><th>Total</th><th>vs Meta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Otimista (recuperação total)</strong></td><td>R$ 267.000</td><td>R$ 155.000</td><td><strong>R$ 422.000</strong></td><td><span class="badge success">100%</span></td></tr>
+        <tr><td><strong>Realista (mantém ritmo)</strong></td><td>R$ 185.000</td><td>R$ 130.000</td><td><strong>R$ 315.000</strong></td><td><span class="badge warn">80%</span></td></tr>
+        <tr><td><strong>Pessimista (gargalo persiste)</strong></td><td>R$ 91.951</td><td>R$ 90.000</td><td><strong>R$ 181.951</strong></td><td><span class="badge danger">46%</span></td></tr>
+      </tbody>
+    </table>
+    <div class="alert warn" style="margin-top:16px;">
+      <strong>Histórico:</strong> junho/25 fechou em R$ 195k (Sales) + R$ 149k (Projetos). Julho/25 foi o pico. Junho é tipicamente forte — janela de aceleração pré-recesso de julho.
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- TAB 5: VAGAS -->
+<div class="tab-content" id="tab-vagas">
+<section>
+  <h2 class="projetos">Vagas com Faturamento em Jogo</h2>
+  <div class="alert warn"><strong>Atenção:</strong> 17 vagas abertas há mais de 90 dias (desde dez/jan). Alto risco de cancelamento — decisão urgente por especialista e CS.</div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">Total de Vagas Ativas</div><div class="value">59</div><div class="sub">R$ 142.950 em potencial total</div></div>
+    <div class="kpi danger"><div class="label">Críticas (&gt;90 dias)</div><div class="value">17</div><div class="sub">Abertas desde dez/jan — risco máximo</div></div>
+    <div class="kpi warn"><div class="label">Em "Enviar Novos"</div><div class="value">43</div><div class="sub">Aguardando candidatos G.O.</div></div>
+    <div class="kpi success"><div class="label">Próximas de Fechar</div><div class="value">8</div><div class="sub">Feedback ou entrevista agendada</div></div>
+  </div>
+  <div class="legend-pills">
+    <span><span class="badge danger">Crítica</span> &gt;90 dias em "Enviar Novos"</span>
+    <span><span class="badge warn">Atenção</span> 60–90 dias ou em risco</span>
+    <span><span class="badge info">Em andamento</span></span>
+    <span><span class="badge success">Próx. fechamento</span></span>
+  </div>
+  <div class="card">
+    <h3>Top Vagas — por idade e potencial</h3>
+    <div class="card-sub">Ordenado por dias aberta. "Potencial" = Shortlist + Finalização restantes.</div>
+    <div id="grid-vagas"></div>
+  </div>
+</section>
+</div>
+
+<!-- TAB 6: INSIGHTS -->
+<div class="tab-content" id="tab-insights">
+<section>
+  <h2 class="acao">Insights · Junho/2026 — Início de Mês</h2>
+  <div class="alert info">
+    <strong>Contexto:</strong> junho tem 21 dias úteis (Corpus Christi 05/06). Após 4 dias úteis: Sales R$17.514 (tendência R$91k), SIMs 8/66. Histórico jun/25: R$195k Sales + R$149k Projetos + 49 SIMs. Potencial de superação.
+  </div>
+  <div class="action-list">
+    <div class="action-item">
+      <div class="priority">Crítico</div>
+      <div class="body">
+        <div class="title">1. Destravar as 17 vagas críticas (&gt;90 dias) imediatamente</div>
+        <div class="desc">Vagas abertas desde dezembro/janeiro ainda em "Enviar Novos". Risco alto de cancelamento em massa. Bloqueia Aline (precisa shortlist) e esgota budget de G.O.</div>
+        <div class="metric"><strong>Ação:</strong> CS contata cada cliente hoje (06/06). Propor renovação de prazo, ajuste de perfil ou migração SaaS. Definir até 10/06 quais ficam ou saem.</div>
+      </div>
+      <div class="impact">Risco:<br><strong>R$ 30-50k</strong><br>em cancelamento</div>
+    </div>
+    <div class="action-item">
+      <div class="priority">Crítico</div>
+      <div class="body">
+        <div class="title">2. Suellen: ritmo de R$ 6.619/dia em Abertura (só 10% acima da meta)</div>
+        <div class="desc">Com 4 dias decorridos e R$7.475 realizados, Suellen precisa acelerar para não acumular déficit. Diferença de R$16.525 vs ritmo esperado.</div>
+        <div class="metric"><strong>Ação:</strong> Vanuza prioriza abertura de novas vagas esta semana. Meta 2 novas vagas transacionais/dia = R$ 5-8k abertura por vaga.</div>
+      </div>
+      <div class="impact">Gap:<br><strong>-R$ 16.525</strong><br>vs ritmo</div>
+    </div>
+    <div class="action-item warn">
+      <div class="priority">Atenção</div>
+      <div class="body">
+        <div class="title">3. Aline: 8 SIMs geraram ~R$ 13.600 — bom início relativo</div>
+        <div class="desc">Comparando com maio (55 SIMs = R$104k → R$1.890/SIM), 8 SIMs a ~R$1.700/SIM está dentro do padrão. Precisa acelerar para 3-4 SIMs/dia.</div>
+        <div class="metric"><strong>Ação:</strong> Priorizar vagas de DUOEXO (R$5.075), PGS (R$6.300), Arca (R$4.200) e Pedra Branca (R$5.250) — todas em fase avançada.</div>
+      </div>
+      <div class="impact">Potencial:<br><strong>R$ 20.825</strong><br>em 4 vagas</div>
+    </div>
+    <div class="action-item warn">
+      <div class="priority">Atenção</div>
+      <div class="body">
+        <div class="title">4. Thaiz sem SIMs — fechar vagas Estratégicos em aberto</div>
+        <div class="desc">Thaiz tinha 225% em maio. Em junho, zero SIMs nos 4 primeiros dias. Vagas Arca (R$4.200) e JJR Contabil (R$5.775) em fase de finalização.</div>
+        <div class="metric"><strong>Ação:</strong> Priorizar fechamento de Arca + JJR + Infiniti Tech nesta semana. Potencial imediato de R$13.125.</div>
+      </div>
+      <div class="impact">Potencial:<br><strong>R$ 13.125</strong><br>vagas Estratégicos</div>
+    </div>
+    <div class="action-item info">
+      <div class="priority">Oportunidade</div>
+      <div class="body">
+        <div class="title">5. Histórico: junho/25 foi bom — replicar padrão</div>
+        <div class="desc">Jun/25 fechou 49 SIMs e R$149k honorários. Jul/25 foi o pico (73 SIMs, R$205k). A janela jun-jul é historicamente a mais forte do ano.</div>
+        <div class="metric"><strong>Ação estratégica:</strong> manter ritmo de abertura de vagas alta e G.O. em máxima capacidade para capitalizar sobre a sazonalidade favorável.</div>
+      </div>
+      <div class="impact">Janela:<br><strong>favorável</strong><br>até agosto</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- TAB 7: HISTÓRICO -->
+<div class="tab-content" id="tab-historico">
+<section>
+  <h2>Histórico de Operações · 14 Meses</h2>
+  <div class="card-sub" style="margin-bottom:16px;">Dados consolidados · mai/25 a jun/26 (jun/26 = parcial)</div>
+  <div class="grid-3">
+    <div class="card"><h3>Sales · Volume</h3><div class="chart-wrapper"><canvas id="chartHistSalesVol"></canvas></div></div>
+    <div class="card"><h3>Projetos · SIMs</h3><div class="chart-wrapper"><canvas id="chartHistSims"></canvas></div></div>
+    <div class="card"><h3>G.O. · Abordagem</h3><div class="chart-wrapper"><canvas id="chartHistGo"></canvas></div></div>
+  </div>
+</section>
+<section>
+  <h2>Tabela Completa · KPIs Mensais</h2>
+  <div class="card"><div id="grid-historico"></div></div>
+</section>
+<section>
+  <h2>Dinâmica do Time</h2>
+  <div class="grid-2">
+    <div class="card"><h3>Tamanho do time · Projetos</h3><div class="chart-wrapper"><canvas id="chartHistTime"></canvas></div></div>
+    <div class="card"><h3>Custo do time × Receita gerada</h3><div class="chart-wrapper"><canvas id="chartHistCusto"></canvas></div></div>
+  </div>
+</section>
+<section>
+  <h2>Insights do Histórico</h2>
+  <div class="action-list">
+    <div class="action-item info"><div class="priority">Histórico</div>
+      <div class="body"><div class="title">Pico de receita: Julho/25 (R$ 260k Sales · R$ 205k Projetos)</div>
+      <div class="desc">Julho foi o melhor mês. Combinação de 71 vagas abertas + 73 SIMs. Janela jul-ago de 2026 pode ser replicada.</div></div>
+      <div class="impact">Replicar<br>jun-jul/26</div>
+    </div>
+    <div class="action-item warn"><div class="priority">Alerta</div>
+      <div class="body"><div class="title">% aproveitamento caiu de 69% (mai/25) para 27,5% (abr/26)</div>
+      <div class="desc">Volume cresceu mas conversão caiu. Sinalizando possível overbooking ou queda de qualidade nos candidatos.</div></div>
+      <div class="impact">Revisar<br>curadoria G.O.</div>
+    </div>
+    <div class="action-item warn"><div class="priority">Risco</div>
+      <div class="body"><div class="title">Time de Projetos: 8 → 5 pessoas desde set/25</div>
+      <div class="desc">Headcount caiu 37%. Custo caiu de R$39k para R$19k/mês mas produtividade por pessoa também caiu. Recomposição necessária para atingir 66 SIMs.</div></div>
+      <div class="impact">Revisar<br>capacidade</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<footer>
+  Painel gerado a partir de 4 planilhas conectadas via Google Drive.<br>
+  Atualize manualmente pelo botão de Reload do Cowork (recolhe os dados mais recentes das planilhas).
+</footer>
+</div>
+
+<script>
+// ===== DATA EMBARCADA =====
+const DATA = {
+  ultimaAtualizacao: '06/06/2026',
+  diasUteisMes: 21,
+  diasUteisDecorridos: 4,
+  diasUteisRestantes: 17,
+  historico: {
+    meses: ['mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25','jan/26','fev/26','mar/26','abr/26','mai/26','jun/26'],
+    projetos: {
+      sims: [80,49,73,56,61,44,43,49,36,39,59,44,44,8],
+      receita: [201199,149407,205719,143152,184941,165053,134550,129907,159999,114591,168136,145320,145320,21075],
+      pessoas: [8,8,8,8,6,6,6,6,4,4,4,5,5,5],
+      custo: [39611,39611,39611,39611,28340,28340,28340,28340,28340,19000,19000,19000,19000,19000],
+      sla: [18,22,20,24,19,19,16,9,19,13,29,36,36,null],
+      vagasTrab: [115,113,134,104,102,95,93,71,78,108,179,160,160,8],
+      vagasCanc: [21,9,10,18,11,14,15,10,15,15,27,20,20,0],
+      aproveit: [69.57,43.36,54.48,53.85,59.80,46.32,46.24,69.01,46.15,36.11,32.96,27.50,27.50,null]
+    },
+    go: {
+      abordados: [null,null,null,null,2548,1545,1509,2958,2558,3904,4485,2474,2474,null],
+      enviados: [81,57,46,51,67,57,41,37,26,66,129,85,85,null],
+      aprovados: [null,null,null,null,null,null,null,null,null,11,32,11,11,null],
+      custo: [5400,5400,5400,5400,5400,5400,5400,5400,5400,9900,9900,9900,9900,9900]
+    },
+    sales: {
+      novos: [10,14,25,14,16,11,8,7,20,17,17,17,15,6],
+      recorrentes: [31,37,40,30,32,27,26,23,36,46,48,11,25,5],
+      unicos: [41,51,65,44,48,38,34,30,56,63,65,28,40,6],
+      vagasAbertas: [54,55,71,42,64,65,54,30,62,48,79,57,37,5],
+      valorContrato: [169602,195037,260569,165372,228936,234532,156732,133226,151030,194444,205157,207224,212674,17514],
+      custoTime: [28720,22058,9218,17242,24137,31241,24192,21192,22294,17602,17798,17798,17798,17798]
+    }
+  },
+  vagas: [
+    [
+        "16129",
+        "GR ASSESSORIA CONTABIL",
+        "Thaiz",
+        "Estratégicos",
+        "04/12/2025",
+        "184",
+        "Enviar Novos",
+        "R$ 0",
+        "Crítica"
+    ],
+    [
+        "16135",
+        "Naves Coelho Contábil",
+        "Isabelle",
+        "Core",
+        "12/12/2025",
+        "176",
+        "Enviar Novos",
+        "R$ 0",
+        "Crítica"
+    ],
+    [
+        "16193",
+        "Masterqualy",
+        "Vittória",
+        "Brasil",
+        "20/01/2026",
+        "137",
+        "Enviar Novos",
+        "R$ 906",
+        "Crítica"
+    ],
+    [
+        "16308",
+        "Bagnato Associados",
+        "Vittória",
+        "Brasil",
+        "27/01/2026",
+        "130",
+        "Enviar Novos",
+        "R$ 2.121",
+        "Crítica"
+    ],
+    [
+        "16320",
+        "RUFINO CONSULTORIA",
+        "Vittória",
+        "Brasil",
+        "28/01/2026",
+        "129",
+        "Enviar Novos",
+        "R$ 1.085",
+        "Crítica"
+    ],
+    [
+        "16348",
+        "Orgatec",
+        "Isabelle",
+        "Core",
+        "04/02/2026",
+        "122",
+        "Enviar Novos",
+        "R$ 4.830",
+        "Crítica"
+    ],
+    [
+        "16384",
+        "Anima Legalizações",
+        "Isabelle",
+        "Core",
+        "11/02/2026",
+        "115",
+        "Enviar Novos",
+        "R$ 447",
+        "Crítica"
+    ],
+    [
+        "16385",
+        "Anima Legalizações",
+        "Isabelle",
+        "Core",
+        "18/02/2026",
+        "108",
+        "Enviar Novos",
+        "R$ 735",
+        "Crítica"
+    ],
+    [
+        "16333",
+        "RR Oliveira",
+        "Isabelle",
+        "Core",
+        "18/02/2026",
+        "108",
+        "Enviar Novos",
+        "R$ 980",
+        "Crítica"
+    ],
+    [
+        "16476",
+        "D+ Contabilidade",
+        "Carla",
+        "Expansão",
+        "24/02/2026",
+        "102",
+        "Enviar Novos",
+        "R$ 907",
+        "Crítica"
+    ],
+    [
+        "16480",
+        "Piacente",
+        "Isabelle",
+        "Core",
+        "24/02/2026",
+        "102",
+        "Enviar Novos",
+        "R$ 3.387",
+        "Crítica"
+    ],
+    [
+        "16485",
+        "Medeiros Org",
+        "Carla",
+        "Expansão",
+        "26/02/2026",
+        "100",
+        "Enviar Novos",
+        "R$ 2.940",
+        "Crítica"
+    ],
+    [
+        "16487",
+        "Fiscotec",
+        "Isabelle",
+        "Core",
+        "26/02/2026",
+        "100",
+        "Enviar Novos",
+        "R$ 1.682",
+        "Crítica"
+    ],
+    [
+        "16502",
+        "Diamante Contabilidade",
+        "Isabelle",
+        "Core",
+        "25/02/2026",
+        "101",
+        "Enviar Novos",
+        "R$ 2.100",
+        "Crítica"
+    ],
+    [
+        "16513",
+        "Constanzo Contabilidade",
+        "Isabelle",
+        "Core",
+        "27/02/2026",
+        "99",
+        "Enviar Novos",
+        "R$ 875",
+        "Crítica"
+    ],
+    [
+        "16517",
+        "Alliance Contabilidade",
+        "Vittória",
+        "Brasil",
+        "27/02/2026",
+        "99",
+        "Enviar Novos",
+        "R$ 1.102",
+        "Crítica"
+    ],
+    [
+        "16519",
+        "GLM Escritório",
+        "Carla",
+        "Expansão",
+        "27/02/2026",
+        "99",
+        "Enviar Novos",
+        "R$ 2.362",
+        "Crítica"
+    ],
+    [
+        "16328",
+        "Miranda e Costa",
+        "Thaiz",
+        "Estratégicos",
+        "04/02/2026",
+        "122",
+        "Agendar Entrevista",
+        "R$ 1.925",
+        "Atenção"
+    ],
+    [
+        "16401",
+        "UNIDAS DO BRASIL",
+        "Isabelle",
+        "Core",
+        "10/02/2026",
+        "116",
+        "Agendar Entrevista",
+        "R$ 1.085",
+        "Atenção"
+    ],
+    [
+        "16542",
+        "Contabilidade Lima",
+        "Carla",
+        "Expansão",
+        "04/03/2026",
+        "94",
+        "Enviar Novos",
+        "R$ 1.208",
+        "Atenção"
+    ],
+    [
+        "16553",
+        "JT Prestação Serv",
+        "Isabelle",
+        "Core",
+        "05/03/2026",
+        "93",
+        "Enviar Novos",
+        "R$ 1.487",
+        "Atenção"
+    ],
+    [
+        "16557",
+        "Wilker Contabilidade",
+        "Isabelle",
+        "Core",
+        "06/03/2026",
+        "92",
+        "Enviar Novos",
+        "R$ 735",
+        "Atenção"
+    ],
+    [
+        "16560",
+        "Kativa Contabilidade",
+        "Isabelle",
+        "Core",
+        "06/03/2026",
+        "92",
+        "Enviar Novos",
+        "R$ 955",
+        "Atenção"
+    ],
+    [
+        "16562",
+        "Kativa Contabilidade",
+        "Isabelle",
+        "Core",
+        "06/03/2026",
+        "92",
+        "Enviar Novos",
+        "R$ 928",
+        "Atenção"
+    ],
+    [
+        "16563",
+        "Kativa Contabilidade",
+        "Isabelle",
+        "Core",
+        "06/03/2026",
+        "92",
+        "Enviar Novos",
+        "R$ 2.773",
+        "Atenção"
+    ],
+    [
+        "16564",
+        "ITATIAIA ATACADISTA",
+        "Vittória",
+        "Brasil",
+        "09/03/2026",
+        "89",
+        "Enviar Novos",
+        "R$ 1.487",
+        "Atenção"
+    ],
+    [
+        "16576",
+        "Helmar Contabil",
+        "Isabelle",
+        "Core",
+        "10/03/2026",
+        "88",
+        "Enviar Novos",
+        "R$ 875",
+        "Atenção"
+    ],
+    [
+        "16577",
+        "ANKOR",
+        "Vittória",
+        "Brasil",
+        "10/03/2026",
+        "88",
+        "Enviar Novos",
+        "R$ 1.418",
+        "Atenção"
+    ],
+    [
+        "16580",
+        "MISTER CONT",
+        "Isabelle",
+        "Core",
+        "10/03/2026",
+        "88",
+        "Enviar Novos",
+        "R$ 1.121",
+        "Atenção"
+    ],
+    [
+        "16704",
+        "Nutriport Comercial",
+        "Isabelle",
+        "Core",
+        "07/04/2026",
+        "60",
+        "Enviar Novos",
+        "R$ 5.460",
+        "Atenção"
+    ],
+    [
+        "16575",
+        "Helmar Contabil",
+        "Isabelle",
+        "Core",
+        "10/03/2026",
+        "88",
+        "Aguard. Feedback",
+        "R$ 875",
+        "Próx. fechamento"
+    ],
+    [
+        "16626",
+        "DUOEXO CONTABILIDADE",
+        "Vittória",
+        "Brasil",
+        "17/03/2026",
+        "81",
+        "Aguard. Feedback",
+        "R$ 5.075",
+        "Próx. fechamento"
+    ],
+    [
+        "16645",
+        "PGS",
+        "Isabelle",
+        "Core",
+        "19/03/2026",
+        "79",
+        "Aguard. Feedback",
+        "R$ 6.300",
+        "Próx. fechamento"
+    ],
+    [
+        "16680",
+        "Arca Accounttech",
+        "Thaiz",
+        "Estratégicos",
+        "27/03/2026",
+        "71",
+        "Entrev. Agendada",
+        "R$ 4.200",
+        "Próx. fechamento"
+    ],
+    [
+        "16689",
+        "Pedra Branca Contabilidade",
+        "Vittória",
+        "Brasil",
+        "31/03/2026",
+        "67",
+        "Entrev. Agendada",
+        "R$ 5.250",
+        "Próx. fechamento"
+    ],
+    [
+        "16718",
+        "CODEP ASSESSORIA",
+        "Isabelle",
+        "Core",
+        "09/04/2026",
+        "58",
+        "Aguard. Feedback",
+        "R$ 4.655",
+        "Próx. fechamento"
+    ],
+    [
+        "16776",
+        "TAXS CONTABILIDADE",
+        "Vittória",
+        "Brasil",
+        "20/04/2026",
+        "47",
+        "Aguard. Feedback",
+        "R$ 2.800",
+        "Próx. fechamento"
+    ],
+    [
+        "16895",
+        "JJR Contabil",
+        "Thaiz",
+        "Estratégicos",
+        "19/05/2026",
+        "18",
+        "Entrev. Agendada",
+        "R$ 5.775",
+        "Próx. fechamento"
+    ],
+    [
+        "16714",
+        "TAG / INFINITI",
+        "Isabelle",
+        "Core",
+        "08/04/2026",
+        "59",
+        "Enviar Novos",
+        "R$ 4.725",
+        "Em andamento"
+    ],
+    [
+        "16715",
+        "TAG / INFINITI",
+        "Isabelle",
+        "Core",
+        "08/04/2026",
+        "59",
+        "Enviar Novos",
+        "R$ 3.203",
+        "Em andamento"
+    ],
+    [
+        "16717",
+        "FOCVS INTELIGENCIA",
+        "Vittória",
+        "Brasil",
+        "09/04/2026",
+        "58",
+        "Enviar Novos",
+        "R$ 2.452",
+        "Em andamento"
+    ],
+    [
+        "16760",
+        "ESCRITORIO CONCEITO",
+        "Isabelle",
+        "Core",
+        "17/04/2026",
+        "50",
+        "Enviar Novos",
+        "R$ 3.850",
+        "Em andamento"
+    ],
+    [
+        "16768",
+        "GR DIGITAL",
+        "Carla",
+        "Expansão",
+        "17/04/2026",
+        "50",
+        "Enviar Novos",
+        "R$ 3.238",
+        "Em andamento"
+    ],
+    [
+        "16777",
+        "TAXS CONTABILIDADE",
+        "Vittória",
+        "Brasil",
+        "20/04/2026",
+        "47",
+        "Enviar Novos",
+        "R$ 2.800",
+        "Em andamento"
+    ],
+    [
+        "16794",
+        "Neo Contabilidade",
+        "Isabelle",
+        "Core",
+        "23/04/2026",
+        "44",
+        "Enviar Novos",
+        "R$ 3.150",
+        "Em andamento"
+    ],
+    [
+        "16832",
+        "Lumi Contabilidade",
+        "Carla",
+        "Expansão",
+        "04/05/2026",
+        "33",
+        "Enviar Novos",
+        "R$ 3.010",
+        "Em andamento"
+    ],
+    [
+        "16837",
+        "Sauvet Campinas",
+        "Carla",
+        "Expansão",
+        "05/05/2026",
+        "32",
+        "Enviar Novos",
+        "R$ 3.150",
+        "Em andamento"
+    ],
+    [
+        "16838",
+        "Sauvet Campinas",
+        "Carla",
+        "Expansão",
+        "05/05/2026",
+        "32",
+        "Enviar Novos",
+        "R$ 3.850",
+        "Em andamento"
+    ],
+    [
+        "16858",
+        "Fiscotec",
+        "Thaiz",
+        "Estratégicos",
+        "08/05/2026",
+        "29",
+        "Enviar Novos",
+        "R$ 1.301",
+        "Em andamento"
+    ],
+    [
+        "16865",
+        "STABILIS",
+        "Carla",
+        "Expansão",
+        "12/05/2026",
+        "25",
+        "Enviar Novos",
+        "R$ 3.430",
+        "Em andamento"
+    ],
+    [
+        "16869",
+        "MMS CONTABILIDADE",
+        "Carla",
+        "Expansão",
+        "12/05/2026",
+        "25",
+        "Enviar Novos",
+        "R$ 2.030",
+        "Em andamento"
+    ],
+    [
+        "16881",
+        "Infiniti Tecnologia",
+        "Thaiz",
+        "Estratégicos",
+        "14/05/2026",
+        "23",
+        "Enviar Novos",
+        "R$ 3.150",
+        "Em andamento"
+    ],
+    [
+        "16890",
+        "Trend Marketing",
+        "Vittória",
+        "Brasil",
+        "15/05/2026",
+        "22",
+        "Enviar Novos",
+        "R$ 2.240",
+        "Em andamento"
+    ],
+    [
+        "16897",
+        "Attenza",
+        "Carla",
+        "Expansão",
+        "19/05/2026",
+        "18",
+        "Enviar Novos",
+        "R$ 3.325",
+        "Em andamento"
+    ],
+    [
+        "16904",
+        "RDF Concept",
+        "Carla",
+        "Expansão",
+        "02/06/2026",
+        "4",
+        "Enviar Novos",
+        "R$ 2.800",
+        "Em andamento"
+    ],
+    [
+        "16905",
+        "AMGC",
+        "Carla",
+        "Expansão",
+        "02/06/2026",
+        "4",
+        "Enviar Novos",
+        "R$ 1.750",
+        "Em andamento"
+    ],
+    [
+        "16906",
+        "MC Sinergia",
+        "Isabelle",
+        "Core",
+        "03/06/2026",
+        "3",
+        "Enviar Novos",
+        "R$ 3.150",
+        "Em andamento"
+    ],
+    [
+        "16909",
+        "GR Digital",
+        "Carla",
+        "Expansão",
+        "05/06/2026",
+        "1",
+        "Enviar Novos",
+        "R$ 2.100",
+        "Em andamento"
+    ],
+    [
+        "16912",
+        "Egewarth Contabilidade",
+        "Vittória",
+        "Brasil",
+        "05/06/2026",
+        "1",
+        "Enviar Novos",
+        "R$ 1.400",
+        "Em andamento"
+    ]
+]
 };
 
-// ===== Tab navigation =====
+// Tab navigation
 document.querySelectorAll('nav.tabs button').forEach(btn => {
   btn.addEventListener('click', () => {
     const tab = btn.dataset.tab;
@@ -1682,150 +1173,97 @@ document.querySelectorAll('nav.tabs button').forEach(btn => {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-' + tab).classList.add('active');
-    // Trigger Chart.js resize when tab becomes visible
     setTimeout(() => Object.values(Chart.instances).forEach(c => c.resize()), 100);
   });
 });
 
-// ===== Helpers =====
-const fmtBRL = v => 'R$ ' + (v||0).toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+const fmtBRL = v => 'R$ ' + (v||0).toLocaleString('pt-BR', {minimumFractionDigits:0,maximumFractionDigits:0});
 const fmtBRLk = v => 'R$ ' + (Math.round((v||0)/1000)) + 'k';
-const fmtPct = v => (v||0).toFixed(1) + '%';
-
 const commonOpts = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10, usePointStyle: true } },
-    tooltip: { backgroundColor: 'rgba(26, 31, 54, 0.95)', padding: 10, cornerRadius: 8 }
+    legend: { position:'bottom', labels:{ font:{ size:11 }, padding:10, usePointStyle:true } },
+    tooltip: { backgroundColor:'rgba(26,31,54,0.95)', padding:10, cornerRadius:8 }
   }
 };
 
-// ===== TAB 1 charts =====
+// Suellen chart (4 days realized, showing trajectory)
 new Chart(document.getElementById('chartSuellen'), {
   type: 'line',
   data: {
-    labels: Array.from({length:20},(_,i)=>'D'+(i+1)),
+    labels: Array.from({length:21},(_,i)=>'D'+(i+1)),
     datasets: [
-      { label: 'Meta linear (6k/dia)', data: Array.from({length:20},(_,i)=>(i+1)*6000), borderColor: '#9ca3af', borderDash:[4,4], pointRadius:0 },
-      { label: 'Realizado', data: [3053,6105,9158,12211,15264,18316,21369,24422,27475,30528,33580,36633,39686,42739,44956,47173,53825,60477,67129,73781], borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,0.1)', fill:true, tension:0.2, pointRadius:3 },
-      { label: 'Meta (R$120k)', data: [6000,12000,18000,24000,30000,36000,42000,48000,54000,60000,66000,72000,78000,84000,90000,96000,102000,108000,114000,120000], borderColor:'#9ca3af', borderDash:[4,4], pointRadius:0 }
+      { label:'Meta (R$6k/dia)', data: Array.from({length:21},(_,i)=>(i+1)*6000), borderColor:'#9ca3af', borderDash:[4,4], pointRadius:0 },
+      { label:'Realizado', data: [1869,3737,5606,7475,...Array(17).fill(null)], borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,0.1)', fill:true, tension:0.2, pointRadius:3 },
+      { label:'Meta total (R$120k)', data: Array.from({length:21},()=>120000/21*(Array.from({length:21},(_,i)=>i+1).indexOf)), borderColor:'#d1fae5', borderDash:[2,2], pointRadius:0 }
     ]
   },
   options: { ...commonOpts, scales:{ y:{ ticks:{ callback: fmtBRLk } } } }
 });
 
+// Aline chart
 new Chart(document.getElementById('chartAline'), {
   type: 'line',
   data: {
-    labels: Array.from({length:20},(_,i)=>'D'+(i+1)),
+    labels: Array.from({length:21},(_,i)=>'D'+(i+1)),
     datasets: [
-      { label:'Meta linear (6k/dia)', data: Array.from({length:20},(_,i)=>(i+1)*6000), borderColor:'#9ca3af', borderDash:[4,4], pointRadius:0 },
-      { label:'Realizado', data:[3850,7700,11550,15400,19250,23100,26950,30800,34650,38500,42350,46200,50050,53896,62217,70538,78906,87274,95643,104011], borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.1)', fill:true, tension:0.2, pointRadius:3 },
-      { label: 'Meta (R$120k)', data: [6000,12000,18000,24000,30000,36000,42000,48000,54000,60000,66000,72000,78000,84000,90000,96000,102000,108000,114000,120000], borderColor:'#9ca3af', borderDash:[4,4], pointRadius:0 }
+      { label:'Meta (R$6k/dia)', data: Array.from({length:21},(_,i)=>(i+1)*6000), borderColor:'#9ca3af', borderDash:[4,4], pointRadius:0 },
+      { label:'Realizado', data: [3400,6800,10200,13600,...Array(17).fill(null)], borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.1)', fill:true, tension:0.2, pointRadius:3 }
     ]
   },
   options: { ...commonOpts, scales:{ y:{ ticks:{ callback: fmtBRLk } } } }
 });
 
-// ===== TAB 2 (Sales) charts =====
+// Sales histórico
 new Chart(document.getElementById('chartSalesHistorico'), {
   type: 'bar',
   data: {
-    labels: ['Janeiro','Fevereiro','Março','Abril','Maio'],
+    labels: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho (parcial)'],
     datasets: [
-      { label:'Meta', data:[250000,250000,230000,255000,267000], backgroundColor:'rgba(99,102,241,0.2)', borderColor:'#6366f1', borderWidth:2, borderRadius:4 },
-      { label:'Realizado', data:[157030,195194,205157,207224,151176], backgroundColor:'#2563eb', borderRadius:4 },
-      { label:'Tendência maio', data:[null,null,null,null,216266], backgroundColor:'#f59e0b', borderRadius:4 }
+      { label:'Meta', data:[250000,250000,230000,255000,267000,267000], backgroundColor:'rgba(99,102,241,0.2)', borderColor:'#6366f1', borderWidth:2, borderRadius:4 },
+      { label:'Realizado', data:[157030,195194,205157,207224,212674,17514], backgroundColor:'#2563eb', borderRadius:4 },
+      { label:'Tendência junho', data:[null,null,null,null,null,91951], backgroundColor:'#f59e0b', borderRadius:4 }
     ]
   },
   options: { ...commonOpts, scales:{ y:{ ticks:{ callback: fmtBRLk } } } }
 });
 
-new Chart(document.getElementById('chartSalesLinha'), {
-  type: 'bar',
-  data: {
-    labels: ['Transacional','SaaS'],
-    datasets: [
-      { label:'Meta', data:[242000,25000], backgroundColor:'#e5e7ee', borderRadius:4 },
-      { label:'Realizado', data:[121620,29556], backgroundColor:['#2563eb','#10b981'], borderRadius:4 }
-    ]
-  },
-  options: { ...commonOpts, scales:{ y:{ ticks:{ callback: fmtBRLk } } } }
-});
-
-new Chart(document.getElementById('chartPipeline'), {
-  type: 'bar',
-  data: {
-    labels: ['Novos leads','Em negociação','Vendidos','Perdidos'],
-    datasets: [{ data:[17,7,2,8], backgroundColor:['#6366f1','#f59e0b','#10b981','#ef4444'], borderRadius:6 }]
-  },
-  options: { ...commonOpts, plugins:{ ...commonOpts.plugins, legend:{ display:false } } }
-});
-
-new Chart(document.getElementById('chartOrigens'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Mídias Sociais','Indicações','Ferramentas Seleção','Outros'],
-    datasets: [{ data:[81,11,9,2], backgroundColor:['#2563eb','#10b981','#f59e0b','#6b7280'] }]
-  },
-  options: commonOpts
-});
-
-new Chart(document.getElementById('chartComposicao'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Transacional Recorrente','Transacional Novo','SaaS Cross-Sell','SaaS Novo'],
-    datasets: [{ data:[77345,38100,25128,0], backgroundColor:['#2563eb','#6366f1','#10b981','#f59e0b'] }]
-  },
-  options: { ...commonOpts, plugins:{ ...commonOpts.plugins, tooltip:{ callbacks:{ label: ctx => ctx.label + ': ' + fmtBRL(ctx.raw) } } } }
-});
-
-// ===== TAB 3 (Projetos) charts =====
+// Squads
 new Chart(document.getElementById('chartSquads'), {
   type: 'bar',
   data: {
     labels: ['Core (Isabelle)','Brasil (Vittória)','Expansão (Carla)','Estratégicos (Thaiz)'],
     datasets: [
-      { label:'Trabalhadas', data:[24,17,17,8], backgroundColor:'#6366f1', borderRadius:4 },
-      { label:'Fechadas (SIMs)', data:[11,7,6,11], backgroundColor:'#10b981', borderRadius:4 },
-      { label:'Meta SIMs', data:[24,17,17,8], backgroundColor:'#f59e0b', borderRadius:4 },
-      { label:'Enviar Novos', data:[21,18,18,8], backgroundColor:'#ef4444', borderRadius:4 }
+      { label:'SIMs realizados', data:[1,3,4,0], backgroundColor:'#10b981', borderRadius:4 },
+      { label:'Meta SIMs', data:[24,17,17,8], backgroundColor:'#e5e7ee', borderRadius:4 }
     ]
   },
   options: commonOpts
 });
 
-new Chart(document.getElementById('chartDaily'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Enviar Novos','Agendar Entrevista','Entrevista Agendada','Aguardando Feedback','Possível Proposta'],
-    datasets: [{ data:[65,13,10,10,2], backgroundColor:['#ef4444','#f59e0b','#6366f1','#3b82f6','#10b981'] }]
-  },
-  options: commonOpts
-});
-
+// Honorários breakdown
 new Chart(document.getElementById('chartHonorarios'), {
   type: 'bar',
   data: {
-    labels: ['Março','Abril','Maio'],
+    labels: ['Março','Abril','Maio','Junho (parcial)'],
     datasets: [
-      { label:'Abertura', data:[65301,74665,73206], backgroundColor:'#2563eb', borderRadius:4 },
-      { label:'Shortlist', data:[82031,53921,85772], backgroundColor:'#6366f1', borderRadius:4 },
-      { label:'Finalização', data:[20477,19878,9150], backgroundColor:'#10b981', borderRadius:4 }
+      { label:'Abertura', data:[65301,74665,73206,7475], backgroundColor:'#2563eb', borderRadius:4 },
+      { label:'Shortlist', data:[82031,53921,85772,10200], backgroundColor:'#6366f1', borderRadius:4 },
+      { label:'Finalização', data:[20477,19878,9150,3400], backgroundColor:'#10b981', borderRadius:4 }
     ]
   },
   options: { ...commonOpts, scales:{ y:{ ticks:{ callback: fmtBRLk } } } }
 });
 
-// ===== TAB 4 (Cohorts) charts =====
+// Cohort receita
 new Chart(document.getElementById('chartCohortReceita'), {
   type: 'line',
   data: {
     labels: DATA.historico.meses,
     datasets: [
-      { label:'Sales (Valor em contrato)', data: DATA.historico.sales.valorContrato, borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,0.1)', tension:0.3, fill:true, pointRadius:3 },
-      { label:'Projetos (Receita)', data: DATA.historico.projetos.receita, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.1)', tension:0.3, fill:true, pointRadius:3 }
+      { label:'Sales', data: DATA.historico.sales.valorContrato, borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,0.1)', tension:0.3, fill:true, pointRadius:3 },
+      { label:'Projetos', data: DATA.historico.projetos.receita, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.1)', tension:0.3, fill:true, pointRadius:3 }
     ]
   },
   options: { ...commonOpts, scales:{ y:{ ticks:{ callback: fmtBRLk } } } }
@@ -1837,7 +1275,7 @@ new Chart(document.getElementById('chartAproveitamento'), {
     labels: DATA.historico.meses,
     datasets: [{ label:'% Aproveitamento', data: DATA.historico.projetos.aproveit, borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.15)', tension:0.3, fill:true, pointRadius:3 }]
   },
-  options: { ...commonOpts, scales:{ y:{ ticks:{ callback: v => v.toFixed(0)+'%' }, max:100 } } }
+  options: { ...commonOpts, scales:{ y:{ ticks:{ callback: v => v!=null ? v.toFixed(0)+'%' : '' }, max:100 } } }
 });
 
 new Chart(document.getElementById('chartCusto'), {
@@ -1845,15 +1283,15 @@ new Chart(document.getElementById('chartCusto'), {
   data: {
     labels: DATA.historico.meses,
     datasets: [
-      { label:'Custo time Projetos', data: DATA.historico.projetos.custo, backgroundColor:'#ef4444', borderRadius:4 },
-      { label:'Custo time G.O.', data: DATA.historico.go.custo, backgroundColor:'#f59e0b', borderRadius:4 },
-      { label:'Custo time Sales', data: DATA.historico.sales.custoTime, backgroundColor:'#6366f1', borderRadius:4 }
+      { label:'Custo Projetos', data: DATA.historico.projetos.custo, backgroundColor:'#ef4444', borderRadius:4 },
+      { label:'Custo G.O.', data: DATA.historico.go.custo, backgroundColor:'#f59e0b', borderRadius:4 },
+      { label:'Custo Sales', data: DATA.historico.sales.custoTime, backgroundColor:'#6366f1', borderRadius:4 }
     ]
   },
   options: { ...commonOpts, scales:{ y:{ stacked:true, ticks:{ callback: fmtBRLk } }, x:{ stacked:true } } }
 });
 
-// ===== TAB 7 (Histórico) charts =====
+// Histórico charts
 new Chart(document.getElementById('chartHistSalesVol'), {
   type: 'bar',
   data: {
@@ -1871,8 +1309,8 @@ new Chart(document.getElementById('chartHistSims'), {
   data: {
     labels: DATA.historico.meses,
     datasets: [
-      { label:'SIMs (vagas fechadas)', data: DATA.historico.projetos.sims, borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.15)', tension:0.3, fill:true, pointRadius:3 },
-      { label:'Vagas canceladas', data: DATA.historico.projetos.vagasCanc, borderColor:'#ef4444', tension:0.3, pointRadius:3 }
+      { label:'SIMs', data: DATA.historico.projetos.sims, borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.15)', tension:0.3, fill:true, pointRadius:3 },
+      { label:'Canceladas', data: DATA.historico.projetos.vagasCanc, borderColor:'#ef4444', tension:0.3, pointRadius:3 }
     ]
   },
   options: commonOpts
@@ -1894,9 +1332,7 @@ new Chart(document.getElementById('chartHistTime'), {
   type: 'line',
   data: {
     labels: DATA.historico.meses,
-    datasets: [
-      { label:'Pessoas em Projetos', data: DATA.historico.projetos.pessoas, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.15)', tension:0.3, fill:true, pointRadius:4 }
-    ]
+    datasets: [{ label:'Pessoas Projetos', data: DATA.historico.projetos.pessoas, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.15)', tension:0.3, fill:true, pointRadius:4 }]
   },
   options: { ...commonOpts, scales:{ y:{ min:0, max:10, ticks:{ stepSize:1 } } } }
 });
@@ -1913,7 +1349,7 @@ new Chart(document.getElementById('chartHistCusto'), {
   options: { ...commonOpts, scales:{ y:{ ticks:{ callback: fmtBRLk } } } }
 });
 
-// ===== Grid.js: Vagas em Jogo =====
+// Grid.js: Vagas
 new gridjs.Grid({
   columns: [
     { name:'Cód', width:'70px' },
@@ -1939,10 +1375,10 @@ new gridjs.Grid({
   sort: true,
   search: true,
   pagination: { limit: 15 },
-  style: { table: { 'font-size': '12px' } }
+  style: { table: { 'font-size':'12px' } }
 }).render(document.getElementById('grid-vagas'));
 
-// ===== Grid.js: Histórico mensal =====
+// Grid.js: Histórico
 const histRows = DATA.historico.meses.map((m, i) => [
   m,
   DATA.historico.sales.valorContrato[i] ? fmtBRL(DATA.historico.sales.valorContrato[i]) : '—',
@@ -1951,11 +1387,10 @@ const histRows = DATA.historico.meses.map((m, i) => [
   DATA.historico.projetos.sims[i] || '—',
   DATA.historico.projetos.vagasTrab[i] || '—',
   DATA.historico.projetos.vagasCanc[i] || '—',
-  (DATA.historico.projetos.aproveit[i] || 0).toFixed(1) + '%',
+  DATA.historico.projetos.aproveit[i] != null ? DATA.historico.projetos.aproveit[i].toFixed(1)+'%' : '—',
   DATA.historico.projetos.pessoas[i] || '—',
   DATA.historico.go.enviados[i] || '—'
 ]);
-
 new gridjs.Grid({
   columns: ['Mês','Sales · Receita','Sales · Vagas','Proj · Receita','Proj · SIMs','Proj · Trab.','Proj · Canc.','Proj · % Aprov.','Proj · Pessoas','G.O. · Enviados'],
   data: histRows,
@@ -1963,23 +1398,15 @@ new gridjs.Grid({
   style: { table: { 'font-size':'12px' } }
 }).render(document.getElementById('grid-historico'));
 
-// ===== Tentar carregar dados em tempo real (Painel Estratégico — sheet pequeno) =====
+// Realtime refresh attempt
 async function tryRealtimeRefresh() {
-  if (!window.cowork || !window.cowork.callMcpTool) {
-    console.log('Cowork callMcpTool não disponível');
-    return;
-  }
+  if (!window.cowork || !window.cowork.callMcpTool) return;
   try {
-    const fileId = '1KcVRPsxKNHi313nZHIB9Wmw7ClV4N1lcu_CbFqtHQ44';
-    const res = await window.cowork.callMcpTool('mcp__4abfd296-b26a-485f-8185-36cdec52adb6__read_file_content', { fileId });
-    if (res && res.fileContent) {
-      const el = document.getElementById('refresh-status');
-      el.classList.add('live');
-      el.textContent = 'Dados atualizados em tempo real · ' + new Date().toLocaleString('pt-BR');
+    const res = await window.cowork.callMcpTool('mcp__4abfd296-b26a-485f-8185-36cdec52adb6__read_file_content', { fileId: '1KcVRPsxKNHi313nZHIB9Wmw7ClV4N1lcu_CbFqtHQ44' });
+    if (res) {
+      document.getElementById('refresh-status').textContent = 'Dados atualizados · ' + new Date().toLocaleString('pt-BR');
     }
-  } catch(e) {
-    console.log('Não foi possível atualizar em tempo real:', e);
-  }
+  } catch(e) {}
 }
 setTimeout(tryRealtimeRefresh, 500);
 </script>
