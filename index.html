@@ -45,11 +45,9 @@
 
     main { max-width: 1280px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
 
-    /* Progress bar global */
     .progress-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
     .progress-bar .fill { height: 100%; border-radius: 3px; transition: width .3s; }
 
-    /* Section titles */
     .section-title {
       font-size: .7rem;
       font-weight: 700;
@@ -59,14 +57,12 @@
       margin-bottom: 12px;
     }
 
-    /* Grid layouts */
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     @media (max-width: 900px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
 
-    /* Card */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -78,7 +74,6 @@
     .card.red    { border-left: 3px solid var(--red);    }
     .card.yellow { border-left: 3px solid var(--yellow); }
 
-    /* Metric card */
     .metric-label { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
     .metric-value { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
     .metric-sub   { font-size: .75rem; color: var(--muted); margin-top: 4px; }
@@ -86,7 +81,6 @@
     .metric-sub .warn { color: var(--yellow); }
     .metric-sub .bad  { color: var(--red); }
 
-    /* Specialist rows */
     .spec-table { width: 100%; border-collapse: collapse; }
     .spec-table th { font-size: .65rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
     .spec-table td { font-size: .85rem; padding: 8px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
@@ -120,39 +114,32 @@
     .mini-bar { height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; margin-top: 4px; }
     .mini-bar .fill { height: 100%; border-radius: 3px; }
 
-    /* Pessoa block */
     .pessoa-block { background: var(--surface2); border-radius: 8px; padding: 14px; }
     .pessoa-name { font-weight: 700; font-size: .9rem; margin-bottom: 10px; }
     .pessoa-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
     .pessoa-key { font-size: .75rem; color: var(--muted); }
     .pessoa-val { font-size: .78rem; font-weight: 600; }
 
-    /* Vagas status */
     .vaga-stat { display: flex; gap: 12px; flex-wrap: wrap; }
     .vaga-item { background: var(--surface2); border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 80px; text-align: center; }
     .vaga-num { font-size: 1.4rem; font-weight: 700; }
     .vaga-lbl { font-size: .65rem; color: var(--muted); text-transform: uppercase; }
 
-    /* Histórico mini chart */
     .hist-bars { display: flex; align-items: flex-end; gap: 5px; height: 60px; margin-top: 10px; }
     .hist-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
     .hist-bar { width: 100%; border-radius: 3px 3px 0 0; background: var(--accent); opacity: .7; transition: opacity .2s; }
     .hist-bar:hover { opacity: 1; }
     .hist-label { font-size: .55rem; color: var(--muted); }
 
-    /* Delta indicator */
     .delta-pos { color: var(--green); }
     .delta-neg { color: var(--red); }
 
-    /* Separator */
     .sep { border: none; border-top: 1px solid var(--border); }
 
-    /* Highlight box */
     .highlight { background: var(--surface2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
     .highlight .hl-label { font-size: .75rem; color: var(--muted); }
     .highlight .hl-value { font-size: 1.1rem; font-weight: 700; }
 
-    /* Footer */
     footer { text-align: center; padding: 20px; font-size: .72rem; color: var(--muted); }
   </style>
 </head>
@@ -163,7 +150,7 @@
     <h1>Painel Operacional · Connectabil</h1>
     <div class="sub">Junho 2026 · Fechamento do dia</div>
   </div>
-  <div class="badge">Atualizado em 08/06/2026 às 18:30</div>
+  <div class="badge">Atualizado em 11/06/2026 às 18:30</div>
 </header>
 
 <main>
@@ -172,13 +159,13 @@
   <div class="card accent">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
       <div class="section-title" style="margin:0">Progresso do Mês</div>
-      <div style="font-size:.8rem; color:var(--muted)">5 dias úteis decorridos · 15 restantes · total 20</div>
+      <div style="font-size:.8rem; color:var(--muted)">8 dias úteis decorridos · 12 restantes · total 20</div>
     </div>
     <div class="progress-bar">
-      <div class="fill" style="width:25%; background: var(--accent);"></div>
+      <div class="fill" style="width:40%; background: var(--accent);"></div>
     </div>
     <div style="display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted); margin-top:4px;">
-      <span>01/06</span><span>08/06 ← hoje</span><span>30/06</span>
+      <span>01/06</span><span>11/06 ← hoje</span><span>30/06</span>
     </div>
   </div>
 
@@ -187,16 +174,16 @@
     <div class="section-title">SIMs · Junho 2026</div>
     <div class="grid-2" style="gap:12px; margin-bottom:14px;">
       <div class="pessoa-block">
-        <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em;">Total</div>
-        <div style="font-size:2.4rem; font-weight:800; color:var(--accent); line-height:1;">6</div>
-        <div style="font-size:.8rem; color:var(--muted);">meta 66 · <span class="delta-neg">9,1%</span></div>
-        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:9.1%; background:var(--accent);"></div></div>
+        <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em;">Total realizado</div>
+        <div style="font-size:2.4rem; font-weight:800; color:var(--accent); line-height:1;">18</div>
+        <div style="font-size:.8rem; color:var(--muted);">meta 66 · <span class="delta-neg">27,3%</span></div>
+        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:27.3%; background:var(--accent);"></div></div>
       </div>
       <div class="pessoa-block">
         <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em;">Tendência Linear</div>
-        <div style="font-size:2.4rem; font-weight:800; color:var(--yellow); line-height:1;">24</div>
-        <div style="font-size:.8rem; color:var(--muted);">ritmo atual 1,2/dia · necessário <span class="delta-neg">4,0/dia</span></div>
-        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:36.4%; background:var(--yellow);"></div></div>
+        <div style="font-size:2.4rem; font-weight:800; color:var(--yellow); line-height:1;">45</div>
+        <div style="font-size:.8rem; color:var(--muted);">ritmo atual 2,25/dia · necessário <span class="delta-neg">4,0/dia</span></div>
+        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:68.2%; background:var(--yellow);"></div></div>
       </div>
     </div>
 
@@ -214,36 +201,36 @@
         <tr>
           <td>Isabelle</td>
           <td><span class="squad-tag squad-core">Core</span></td>
-          <td style="text-align:center; font-weight:700;">5</td>
+          <td style="text-align:center; font-weight:700;">9</td>
           <td style="text-align:center; color:var(--muted);">24</td>
-          <td style="text-align:right;"><span class="pct-pill pct-mid">20,8%</span></td>
-        </tr>
-        <tr>
-          <td>Carla</td>
-          <td><span class="squad-tag squad-expansao">Expansão</span></td>
-          <td style="text-align:center; font-weight:700;">1</td>
-          <td style="text-align:center; color:var(--muted);">17</td>
-          <td style="text-align:right;"><span class="pct-pill pct-low">5,9%</span></td>
+          <td style="text-align:right;"><span class="pct-pill pct-mid">37,5%</span></td>
         </tr>
         <tr>
           <td>Vittória</td>
           <td><span class="squad-tag squad-brasil">Brasil</span></td>
-          <td style="text-align:center; font-weight:700;">0</td>
+          <td style="text-align:center; font-weight:700;">4</td>
           <td style="text-align:center; color:var(--muted);">17</td>
-          <td style="text-align:right;"><span class="pct-pill pct-low">0%</span></td>
+          <td style="text-align:right;"><span class="pct-pill pct-low">23,5%</span></td>
+        </tr>
+        <tr>
+          <td>Carla</td>
+          <td><span class="squad-tag squad-expansao">Expansão</span></td>
+          <td style="text-align:center; font-weight:700;">2</td>
+          <td style="text-align:center; color:var(--muted);">17</td>
+          <td style="text-align:right;"><span class="pct-pill pct-low">11,8%</span></td>
         </tr>
         <tr>
           <td>Thaiz</td>
           <td><span class="squad-tag squad-estrategico">Estratégico</span></td>
-          <td style="text-align:center; font-weight:700;">0</td>
+          <td style="text-align:center; font-weight:700;">3</td>
           <td style="text-align:center; color:var(--muted);">8</td>
-          <td style="text-align:right;"><span class="pct-pill pct-low">0%</span></td>
+          <td style="text-align:right;"><span class="pct-pill pct-mid">37,5%</span></td>
         </tr>
         <tr class="total-row">
           <td colspan="2">Total</td>
-          <td style="text-align:center;">6</td>
+          <td style="text-align:center;">18</td>
           <td style="text-align:center; color:var(--muted);">66</td>
-          <td style="text-align:right;"><span class="pct-pill pct-low">9,1%</span></td>
+          <td style="text-align:right;"><span class="pct-pill pct-low">27,3%</span></td>
         </tr>
       </tbody>
     </table>
@@ -256,19 +243,19 @@
     <div class="grid-3" style="margin-bottom:16px;">
       <div class="pessoa-block">
         <div class="metric-label">Realizado</div>
-        <div class="metric-value" style="font-size:1.4rem;">R$ 21.844</div>
-        <div class="metric-sub">meta R$ 180.000 · <span class="bad">12,1%</span></div>
-        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:12.1%; background:var(--red);"></div></div>
+        <div class="metric-value" style="font-size:1.4rem;">R$ 40.362</div>
+        <div class="metric-sub">meta R$ 180.000 · <span class="bad">22,4%</span></div>
+        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:22.4%; background:var(--red);"></div></div>
       </div>
       <div class="pessoa-block">
         <div class="metric-label">Falta</div>
-        <div class="metric-value" style="font-size:1.4rem; color:var(--red);">R$ 158.156</div>
-        <div class="metric-sub">R$ 10.544/dia necessário</div>
+        <div class="metric-value" style="font-size:1.4rem; color:var(--red);">R$ 139.637</div>
+        <div class="metric-sub">R$ 11.636/dia necessário</div>
       </div>
       <div class="pessoa-block">
         <div class="metric-label">Tendência Linear</div>
-        <div class="metric-value" style="font-size:1.4rem; color:var(--yellow);">R$ 87.377</div>
-        <div class="metric-sub">ritmo atual R$ 4.369/dia</div>
+        <div class="metric-value" style="font-size:1.4rem; color:var(--yellow);">R$ 100.907</div>
+        <div class="metric-sub">ritmo atual R$ 5.045/dia · % Short: 42,1%</div>
       </div>
     </div>
 
@@ -284,31 +271,31 @@
           <span class="pessoa-val">R$ 6.000</span>
         </div>
         <div class="pessoa-row">
-          <span class="pessoa-key">Meta acumulada (5 dias)</span>
-          <span class="pessoa-val">R$ 30.000</span>
+          <span class="pessoa-key">Meta acumulada (8 dias)</span>
+          <span class="pessoa-val">R$ 48.000</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Realizado</span>
-          <span class="pessoa-val" style="color:var(--text);">R$ 7.838</span>
+          <span class="pessoa-val" style="color:var(--text);">R$ 18.082</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Delta</span>
-          <span class="pessoa-val delta-neg">−R$ 22.163</span>
+          <span class="pessoa-val delta-neg">−R$ 29.918</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Ritmo atual</span>
-          <span class="pessoa-val delta-neg">R$ 1.568/dia</span>
+          <span class="pessoa-val delta-neg">R$ 2.260/dia</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Necessário p/ meta</span>
-          <span class="pessoa-val delta-neg">R$ 7.478/dia</span>
+          <span class="pessoa-val delta-neg">R$ 8.493/dia</span>
         </div>
         <div class="pessoa-row">
-          <span class="pessoa-key">Tendência</span>
-          <span class="pessoa-val" style="color:var(--yellow);">R$ 31.350</span>
+          <span class="pessoa-key">Tendência mensal</span>
+          <span class="pessoa-val" style="color:var(--yellow);">R$ 45.206</span>
         </div>
-        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:26.1%; background:var(--red);"></div></div>
-        <div style="font-size:.65rem; color:var(--muted); margin-top:3px;">26,1% da meta mensal (R$ 120.000)</div>
+        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:15.1%; background:var(--red);"></div></div>
+        <div style="font-size:.65rem; color:var(--muted); margin-top:3px;">15,1% da meta mensal (R$ 120.000)</div>
       </div>
 
       <!-- Aline -->
@@ -319,39 +306,39 @@
           <span class="pessoa-val">R$ 6.000</span>
         </div>
         <div class="pessoa-row">
-          <span class="pessoa-key">Meta acumulada (5 dias)</span>
-          <span class="pessoa-val">R$ 30.000</span>
+          <span class="pessoa-key">Meta acumulada (8 dias)</span>
+          <span class="pessoa-val">R$ 48.000</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Shortlist</span>
-          <span class="pessoa-val">R$ 11.767</span>
+          <span class="pessoa-val">R$ 16.999</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Finalização</span>
-          <span class="pessoa-val">R$ 2.240</span>
+          <span class="pessoa-val">R$ 5.280</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Total realizado</span>
-          <span class="pessoa-val" style="color:var(--text);">R$ 14.007</span>
+          <span class="pessoa-val" style="color:var(--text);">R$ 22.280</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Delta</span>
-          <span class="pessoa-val delta-neg">−R$ 15.993</span>
+          <span class="pessoa-val delta-neg">−R$ 25.720</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Ritmo atual</span>
-          <span class="pessoa-val" style="color:var(--yellow);">R$ 2.801/dia</span>
+          <span class="pessoa-val" style="color:var(--yellow);">R$ 2.785/dia</span>
         </div>
         <div class="pessoa-row">
           <span class="pessoa-key">Necessário p/ meta</span>
-          <span class="pessoa-val delta-neg">R$ 7.066/dia</span>
+          <span class="pessoa-val delta-neg">R$ 8.143/dia</span>
         </div>
         <div class="pessoa-row">
-          <span class="pessoa-key">Tendência</span>
-          <span class="pessoa-val" style="color:var(--yellow);">R$ 56.027</span>
+          <span class="pessoa-key">Tendência mensal</span>
+          <span class="pessoa-val" style="color:var(--yellow);">R$ 55.701</span>
         </div>
-        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:46.7%; background:var(--yellow);"></div></div>
-        <div style="font-size:.65rem; color:var(--muted); margin-top:3px;">46,7% da meta mensal (R$ 120.000)</div>
+        <div class="mini-bar" style="margin-top:8px;"><div class="fill" style="width:18.6%; background:var(--yellow);"></div></div>
+        <div style="font-size:.65rem; color:var(--muted); margin-top:3px;">18,6% da meta mensal (R$ 120.000)</div>
       </div>
     </div>
   </div>
@@ -363,30 +350,30 @@
       <div class="section-title">Vagas em Aberto · Projetos</div>
       <div class="vaga-stat" style="margin-bottom:14px;">
         <div class="vaga-item">
-          <div class="vaga-num">104</div>
-          <div class="vaga-lbl">Total</div>
+          <div class="vaga-num">111</div>
+          <div class="vaga-lbl">Pipeline</div>
         </div>
         <div class="vaga-item" style="border-left:2px solid var(--accent);">
-          <div class="vaga-num" style="color:var(--accent);">84</div>
+          <div class="vaga-num" style="color:var(--accent);">71</div>
           <div class="vaga-lbl">Abertas</div>
         </div>
         <div class="vaga-item" style="border-left:2px solid var(--green);">
-          <div class="vaga-num" style="color:var(--green);">11</div>
-          <div class="vaga-lbl">Fechadas</div>
+          <div class="vaga-num" style="color:var(--green);">18</div>
+          <div class="vaga-lbl">SIMs</div>
         </div>
         <div class="vaga-item" style="border-left:2px solid var(--red);">
-          <div class="vaga-num" style="color:var(--red);">9</div>
-          <div class="vaga-lbl">Canceladas</div>
+          <div class="vaga-num" style="color:var(--red);">19</div>
+          <div class="vaga-lbl">Fechadas</div>
         </div>
       </div>
       <div class="highlight">
         <div>
-          <div class="hl-label">Pipeline de receita (vagas abertas)</div>
-          <div class="hl-value" style="color:var(--accent);">R$ 20.465</div>
+          <div class="hl-label">Faturamento Abertura (pipeline)</div>
+          <div class="hl-value" style="color:var(--accent);">R$ 18.082</div>
         </div>
         <div style="text-align:right;">
-          <div class="hl-label">% shortlist sobre abertura</div>
-          <div class="hl-value">53,9%</div>
+          <div class="hl-label">% shortlist sobre total</div>
+          <div class="hl-value">42,1%</div>
         </div>
       </div>
     </div>
@@ -397,13 +384,23 @@
       <div class="grid-2" style="gap:10px; margin-bottom:14px;">
         <div class="pessoa-block">
           <div class="metric-label">Clientes atendidos</div>
-          <div class="metric-value">7</div>
-          <div class="metric-sub">1 novo · 6 recorrentes</div>
+          <div class="metric-value">14</div>
+          <div class="metric-sub">2 novos · 12 recorrentes</div>
         </div>
         <div class="pessoa-block">
           <div class="metric-label">Receita gerada</div>
-          <div class="metric-value" style="font-size:1.2rem;">R$ 20.465</div>
-          <div class="metric-sub">Tendência: <span class="warn">R$ 85.951</span></div>
+          <div class="metric-value" style="font-size:1.2rem;">R$ 52.572</div>
+          <div class="metric-sub">Tendência: <span class="warn">R$ 131.430</span></div>
+        </div>
+      </div>
+      <div class="highlight" style="margin-bottom:12px;">
+        <div>
+          <div class="hl-label">Transacional (1 novo + 12 recorrentes)</div>
+          <div class="hl-value">R$ 48.144</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="hl-label">SaaS (1 novo)</div>
+          <div class="hl-value">R$ 4.428</div>
         </div>
       </div>
       <hr class="sep" style="margin-bottom:12px;">
@@ -411,12 +408,12 @@
       <div class="grid-2" style="gap:10px;">
         <div class="pessoa-block">
           <div class="metric-label">Candidatos abordados</div>
-          <div class="metric-value">304</div>
+          <div class="metric-value">54</div>
         </div>
         <div class="pessoa-block">
           <div class="metric-label">Agendados</div>
-          <div class="metric-value" style="color:var(--red);">0</div>
-          <div class="metric-sub">sem conversões ainda</div>
+          <div class="metric-value" style="color:var(--yellow);">3</div>
+          <div class="metric-sub">0 entrevistas realizadas</div>
         </div>
       </div>
     </div>
@@ -424,7 +421,7 @@
 
   <!-- HISTÓRICO SIMS -->
   <div class="card">
-    <div class="section-title">Histórico SIMs · últimos 12 meses</div>
+    <div class="section-title">Histórico SIMs · últimos 13 meses</div>
     <div class="hist-bars">
       <!-- max = 80 -->
       <div class="hist-bar-wrap">
@@ -476,31 +473,30 @@
         <div class="hist-label">abr/26<br>44</div>
       </div>
       <div class="hist-bar-wrap">
-        <div class="hist-bar" style="height:calc(6/80 * 100%); background:var(--yellow);"></div>
-        <div class="hist-label" style="color:var(--yellow);">jun/26<br>6*</div>
+        <div class="hist-bar" style="height:calc(18/80 * 100%); background:var(--yellow);"></div>
+        <div class="hist-label" style="color:var(--yellow);">jun/26<br>18*</div>
       </div>
     </div>
-    <div style="font-size:.65rem; color:var(--muted); margin-top:6px;">* jun/26 parcial — 5 de 20 dias úteis decorridos. Tendência: 24 SIMs.</div>
+    <div style="font-size:.65rem; color:var(--muted); margin-top:6px;">* jun/26 parcial — 8 de 20 dias úteis decorridos. Tendência: 45 SIMs.</div>
   </div>
 
   <!-- DESTAQUE FECHAMENTO -->
   <div class="card yellow" style="background:var(--surface2);">
-    <div class="section-title">Fechamento 08/06 · O que mudou hoje</div>
+    <div class="section-title">Fechamento 11/06 · O que mudou desde 08/06</div>
     <div style="font-size:.85rem; line-height:1.7; color:var(--text);">
-      <p>Início de semana 2 (08–13/06). Carla (Expansão) registrou 1 SIM na semana 2, primeiro desde o início do mês.
-      Isabelle (Core) mantém liderança com 5 SIMs — todos registrados na semana 1.</p>
+      <p><strong style="color:var(--yellow);">SIMs:</strong> De 6 para 18 em 3 dias úteis (+12). Isabelle (Core) saiu de 5 para 9; Vittória (Brasil) abriu conta com 4; Thaiz (Estratégico) com 3; Carla (Expansão) somou mais 1, totalizando 2. Isabelle e Thaiz lideram atingimento percentual (37,5% cada).</p>
       <br>
-      <p>Faturamento de projetos totaliza R$ 21.844 (12,1% da meta). O shortlist representa 53,9% do total faturado,
-      sinalizando pipeline ativo. Aline está em ritmo mais próximo da meta do que Suellen:
-      R$ 2.801/dia vs R$ 1.568/dia — ambas abaixo dos R$ 6.000 necessários.</p>
+      <p><strong style="color:#60a5fa;">Projetos — Suellen:</strong> Abertura saiu de R$ 7.838 para R$ 18.082 (+R$ 10.244). Ritmo ainda abaixo do necessário: R$ 2.260/dia contra meta de R$ 6.000/dia. Tendência mensal de R$ 45.206 (meta: R$ 120.000).</p>
       <br>
-      <p>Nenhum candidato agendado pelo G.O. em junho. 304 abordagens realizadas.</p>
+      <p><strong style="color:#e879f9;">Projetos — Aline:</strong> Shortlist + Finalização saiu de R$ 14.007 para R$ 22.280 (+R$ 8.273). Ritmo mais alto que Suellen — R$ 2.785/dia — mas ainda bem abaixo dos R$ 6.000 necessários. Tendência mensal de R$ 55.701.</p>
+      <br>
+      <p><strong style="color:var(--green);">Comercial:</strong> Salto expressivo — de R$ 20.465 para R$ 52.572 (+R$ 32.107). Reflexo do faturamento de 12 clientes recorrentes processados no período. Tendência mensal de R$ 131.430, acima da referência de R$ 120.000 do mês anterior.</p>
     </div>
   </div>
 
 </main>
 
-<footer>Connectabil · Painel Operacional · Atualizado automaticamente via Cowork · 08/06/2026 18:30</footer>
+<footer>Connectabil · Painel Operacional · Atualizado automaticamente via Cowork · 11/06/2026 18:30</footer>
 
 </body>
 </html>
